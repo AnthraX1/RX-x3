@@ -1,0 +1,19 @@
+.relay-modal{
+    .ant-modal-body{
+        .ant-row{
+            justify-content: flex-start;
+            margin-bottom: 10px;
+            button{
+                padding: 0 30px;
+                margin: 40px 20px 0;
+            }
+        }
+        .line{
+            display: flex;
+            .ant-row{
+                flex: 1;
+                
+            }
+        }
+    }
+}

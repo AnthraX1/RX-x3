@@ -1,0 +1,24 @@
+.ant-layout-header {
+    display: flex;
+    align-items: center;
+    .left {
+        width: 300px;
+        text-align: left;
+        margin-left: 20px;
+        color: #333333;
+        font-size: 18px;
+    }
+    .right {
+        flex: 1;
+        text-align: right;
+        margin-right: 20px;
+        color: #333333;
+        span:nth-of-type(2) {
+            margin-left: 20px;
+            color: #F5222D;
+            font-family: PingFangSC-Regular;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    }
+}

@@ -1,0 +1,13 @@
+.storage {
+    padding-top: 30px;
+    >div {
+        width: 400px;
+        display: flex;
+        margin: 20px auto;
+        font-size: 14px;
+        line-height: 28px;
+        input{
+            margin-left: 20px;
+        }
+    }
+}

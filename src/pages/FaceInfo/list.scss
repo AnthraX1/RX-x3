@@ -1,0 +1,46 @@
+.face-id-list{
+    .ant-drawer-body{
+        .layout{
+            display: flex;
+            text-align: center;
+            height: 50px;
+            line-height: 50px;
+            .index{
+                width: 100px;
+            }
+            .face-id{
+                flex: 1;
+            }
+            .examine{
+                width: 100px;
+            }
+        }
+        .tit{
+            font-size: 14px;
+            font-weight: 700;
+            background-color: #fafafa;
+        }
+        .line{
+            border-bottom: 1px solid #e0e0e0;
+            &:hover{
+                background-color: #e6f7ff;
+            }
+            .examine{
+                cursor: pointer;
+                color: rgb(13, 110, 255);
+            }
+        }
+    }
+}
+.children-drawer{
+    .ant-drawer-body{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        img{
+            width: 100px;
+            height: 100px;
+            margin: 10px;
+        }
+    }
+}

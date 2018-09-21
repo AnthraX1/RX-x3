@@ -1,0 +1,107 @@
+.face-list {
+    flex: 1;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    .search {
+        display: flex;
+        height: 32px;
+        margin-top: 30px;
+        .select {
+            display: flex;
+            width: 260px;
+            margin-right: 20px;
+            .ant-select-selection__rendered {
+                width: 80px;
+            }
+        }
+        .btn {
+            margin-right: 20px;
+        }
+        .searchByImg {
+            display: flex;
+            >div {
+                display: flex;
+                .ant-input-search {
+                    margin: 0 20px;
+                }
+            }
+        }
+    }
+    .list {
+        flex: 1;
+        margin-top: 20px;
+        .layout {
+            display: flex;
+            text-align: center;
+            .index {
+                width: 40px;
+            }
+            .id {
+                width: 100px;
+            }
+            .time {
+                width: 300px;
+            }
+            .ID-card {
+                flex: 1;
+            }
+            .img {
+                flex: 1;
+            }
+        }
+        .title {
+            background-color: #fafafa;
+            height: 50px;
+            line-height: 50px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        .body {
+            height: 70px;
+            line-height: 70px;
+            font-size: 12px;
+            color: #666666;
+            &:hover {
+                background-color: #e6f7ff;
+            }
+            .img {
+                display: flex;
+                justify-content: center;
+                img {
+                    width: 50px;
+                    height: 60px;
+                    margin: 2px 30px;
+                }
+            }
+        }
+    }
+    .page {
+        text-align: center;
+        height: 34px;
+        margin-bottom: 10px;
+    }
+}
+
+.img-list-modal {
+    .ant-modal-body {
+        padding: 0;
+        p {
+            margin-bottom: 0;
+            padding: 20px 20px;
+        }
+        .img-list {
+            display: flex;
+            justify-content: center;
+            img {
+                width: 100px;
+                height: 160px;
+                margin: 20px;
+            }
+        }
+                .btn{
+                    text-align: center;
+                    padding: 20px 0 50px;
+                }
+    }
+}

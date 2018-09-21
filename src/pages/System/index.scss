@@ -1,0 +1,42 @@
+.system {
+    .title {
+        margin-top: 30px;
+        height: 40px;
+        background-color: #fafafa;
+        line-height: 40px;
+        border-left: 6px solid #1890ff;
+        padding-left: 10px;
+        font-size: 14px;
+        font-weight: 700;
+    }
+    .reset-password {
+        .ant-row {
+            display: flex;
+            justify-content: center;
+        }
+    }
+    .reboot {
+        padding-top: 20px;
+        text-align: center;
+        color: #333333;
+    }
+}
+
+.reset-modal {
+    .ant-modal-body {
+        text-align: center;
+        .icon {
+            font-size: 50px;
+            color: #F5222D;
+        }
+        p {
+            font-weight: 700;
+        }
+        .btn{
+            button{
+                height: 26px;
+                margin: 0 30px;
+            }
+        }
+    }
+}

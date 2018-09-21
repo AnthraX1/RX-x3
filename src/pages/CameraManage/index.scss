@@ -1,0 +1,120 @@
+.camera-manage {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    .top {
+        margin-left: 30px;
+        margin-top: 10px;
+        height: 28px;
+        span.warn {
+            font-size: 12px;
+            color: #666;
+            margin-left: 20px;
+        }
+    }
+    .table {
+        flex: 1;
+        padding: 20px 30px;
+        text-align: center;
+        .layout {
+            display: flex;
+            .index {
+                width: 50px;
+            }
+            .name {
+                width: 100px;
+            }
+            .maker {
+                width: 100px;
+            }
+            .id {
+                //   width: 150px;
+                flex: 1;
+            }
+            .ip {
+                //   width: 150px;
+                flex: 1;
+            }
+            .port {
+                width: 70px;
+            }
+            .protocol {
+                //   width: 150px;
+                flex: 1;
+            }
+            .link-state {
+                //   width: 120px;
+                flex: 1;
+            }
+            .link-test {
+                width: 70px;
+            }
+            .operate {
+                //   width: 100px;
+                flex: 1;
+            }
+        }
+        .title {
+            height: 40px;
+            background-color: #fafafa;
+            line-height: 40px;
+            font-size: 13px;
+            font-weight: 700;
+            text-align: center;
+            border-bottom: 1px solid #e8e8e8;
+        }
+        .line:not(p) {
+            height: 90px;
+            line-height: 90px;
+            font-size: 13px;
+            color: #666666;
+            &:hover {
+                background-color: #e6f7ff;
+            }
+            .protocol,
+            .link-state {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                p {
+                    line-height: 12px;
+                    span {
+                        color: #000;
+                        font-weight: 700;
+                    }
+                }
+            }
+            .link-test,
+            .operate {
+                span {
+                    text-decoration: none;
+                    margin: 0 4px;
+                    user-select: none;
+                    &:hover {
+                        cursor: pointer;
+                    }
+                }
+                span.red {
+                    color: #F5222D;
+                }
+                span.blue {
+                    color: #1890FF;
+                }
+            }
+        }
+    }
+    .page {
+        text-align: center;
+        height: 34px;
+        margin-bottom: 10px;
+    } 
+  }
+  // 弹窗样式
+  .ant-modal-content {
+      div.ant-modal-footer {
+          div {
+              text-align: center;
+              margin-top: 20px;
+          }
+      }
+  }

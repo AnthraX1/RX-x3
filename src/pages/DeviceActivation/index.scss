@@ -1,0 +1,14 @@
+.ant-form{
+    padding-top: 20px;
+    text-align: center;
+    .ant-row{
+        display: flex;
+        justify-content: center;
+        .ant-btn{
+            padding: 0 60px;
+        }
+        .ant-form-explain{
+            text-align: left;
+        }
+    }
+}

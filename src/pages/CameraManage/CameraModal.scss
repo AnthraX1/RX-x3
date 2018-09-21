@@ -1,0 +1,21 @@
+.carmera-modal {
+    .ant-modal-content {
+        .ant-modal-body{
+            .ant-row{
+                .ant-form-item-control-wrapper{
+                    flex: 1;
+                }
+            }
+        }
+        .model-btn {
+            display: flex;
+            justify-content: center;
+            .ant-btn {
+                padding: 0 30px;
+            }
+            .ant-btn:nth-of-type(2) {
+                margin-left: 60px;
+            }
+        }
+    }
+}

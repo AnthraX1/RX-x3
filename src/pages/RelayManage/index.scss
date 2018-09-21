@@ -1,0 +1,83 @@
+.relay-manage {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    .top {
+        margin-left: 30px;
+        margin-top: 10px;
+    }
+    .table {
+        flex: 1;
+        padding: 20px 30px;
+        text-align: center;
+        .layout {
+            display: flex;
+            .index {
+                width: 50px;
+            }
+            .name {
+                flex: 1;
+            }
+            .maker {
+                flex: 1;
+            }
+            .id {
+                flex: 1;
+            }
+            .ip {
+                flex: 1;
+            }
+            .way {
+                flex: 1;
+            }
+            .link-test {
+                flex: 1;
+            }
+            .link-state {
+                flex: 1;
+            }
+            .operate {
+                flex: 1;
+            }
+        }
+        .title {
+            height: 40px;
+            background-color: #fafafa;
+            border-bottom: 1px solid #E8E8E8;
+            line-height: 40px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+        .body {
+            .line {
+                .red {
+                    color: #F5222D;
+                }
+                .blue {
+                    color: #1890FF;
+                }
+                span{
+                    cursor: pointer;
+                }
+                height: 70px;
+                line-height: 70px;
+                font-size: 13px;
+                color: #666666;
+                &:hover {
+                    background-color: #E6F7FF;
+                }
+                
+                .operate{
+                    span{
+                        margin: 0 4px;
+                    }
+                }
+            }
+        }
+    }
+    .page {
+        text-align: center;
+        height: 34px;
+        margin-bottom: 10px;
+    }
+}

@@ -1,0 +1,47 @@
+.test-modal {
+    .ant-modal-content {
+        .ant-modal-body {
+            text-align: center;
+            .err-icon {
+                font-size: 40px;
+                &.err {
+                    color: #F5222D;
+                }
+                &.success {
+                    color: #52C41A;
+                }
+            }
+            .type1 {
+                div:nth-of-type(1),
+                div:nth-of-type(2) {
+                    display: flex;
+                    font-size: 12px;
+                    margin-top: 4px;
+                    span:nth-of-type(1) {
+                        flex: 1;
+                        text-align: right; // margin-right: 3px;
+                        color: #666666;
+                    }
+                    span:nth-of-type(2) {
+                        flex: 1;
+                        text-align: left;
+                        margin-left: 6px;
+                        &.err {
+                            color: #F5222D;
+                        }
+                        &.success {
+                            color: #1890FF;
+                        }
+                    }
+                }
+            }
+            .type2{
+                font-weight: 700;
+            }
+            .btn {
+                margin-top: 30px;
+                font-size: 12px;
+            }
+        }
+    }
+}

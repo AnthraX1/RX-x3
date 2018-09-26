@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Pagination } from 'antd'
+// import { Button, Pagination } from 'antd'
 import './index.scss'
 import CameraModal from './CameraModal'
 import TestModal from './../../components/TestModal'

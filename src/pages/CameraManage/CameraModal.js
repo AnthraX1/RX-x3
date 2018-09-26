@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Modal, Form, Input, Button, Radio } from 'antd';
+import { Modal, Form, Input, Button } from 'antd';
 import './CameraModal.scss'
 
 const FormItem = Form.Item;
-const RadioGroup = Radio.Group;
+// const RadioGroup = Radio.Group;
 
 class CameraModal extends Component {
     state = {

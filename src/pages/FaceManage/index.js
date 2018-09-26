@@ -1,26 +1,72 @@
 import React, { Component } from 'react';
 import { Form, Input, Button, message } from 'antd'
+import axios from '../../config/axios.js'
 import './index.scss'
 
 const FormItem = Form.Item
 
 class FaceManage extends Component {
-
+    state = {
+        btnText: "修改",
+        control: true
+    }
+    componentDidMount() {
+        this.initForm()
+    }
+    initForm = () => {
+        axios.get('/FaceGW/').then(data => {
+            let result = data.data[0]
+            // console.log(result);
+            this.setState({
+                result
+            })
+            this.props.form.setFieldsValue({
+                type: result.type,
+                name: result.name,
+                MAC: result.mac,
+                version: result.version,
+                MQTT: result.mqtt,
+                supportLinesNum: result.caps_ch,
+            })
+        })
+    }
     handleSubmit = (e) => {
         e.preventDefault();
+        this.setState({
+            control: false,
+            btnText: "完成"
+        })
+        if (this.state.control) return
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
-                message.success('成功')
+                this.setState({
+                    control: true,
+                    btnText: "修改"
+                })
+                // console.log('Received values of form: ', values);
+                axios.post('/FaceGW/', {
+                    caps_ch: this.state.result.caps_ch,
+                    code: this.state.result.code,
+                    mac: this.state.result.mac,
+                    mqtt: values.MQTT,
+                    name: values.name,
+                    type: this.state.result.type,
+                    version: this.state.result.version
+                }).then(data => {
+                    // console.log(data)
+                    if(data.status !== 200) {
+                        message.error('配置失败')
+                        return
+                    }
+                    this.initForm()
+                    message.success('配置成功')
+                })
             }
         });
     }
 
     render() {
-        const { getFieldDecorator, setFieldsValue } = this.props.form;
-        // setFieldsValue({
-        //     name: 'RK-X3'
-        // })
+        const { getFieldDecorator } = this.props.form;
         return (
             <div className='face-manage'>
                 <div className="tit">
@@ -43,13 +89,13 @@ class FaceManage extends Component {
                         label="网关名称"
                         labelCol={{ span: 2 }}
                         wrapperCol={{ span: 5 }}
-                        
+
                     >
                         {getFieldDecorator('name', {
                             rules: [{ required: true, message: '网关名称不能为空' }],
-                            initialValue:'RK-X3'
+                            initialValue: 'RK-X3'
                         })(
-                            <Input />
+                            <Input disabled={this.state.control} />
                         )}
                     </FormItem>
                     <FormItem
@@ -82,7 +128,7 @@ class FaceManage extends Component {
                         {getFieldDecorator('MQTT', {
                             rules: [{ required: true, message: 'MQTT不能为空' }],
                         })(
-                            <Input />
+                            <Input disabled={this.state.control} />
                         )}
                     </FormItem>
                     <FormItem
@@ -101,7 +147,7 @@ class FaceManage extends Component {
                         wrapperCol={{ span: 12 }}
                     >
                         <Button type="primary" htmlType="submit">
-                            提交
+                            {this.state.btnText}
                         </Button>
                     </FormItem>
                 </Form>

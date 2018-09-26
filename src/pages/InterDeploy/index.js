@@ -1,20 +1,64 @@
 import React, { Component } from 'react';
 import { Form, Input, Button, message } from 'antd';
 import './index.scss'
+import axios from '../../config/axios.js'
 const FormItem = Form.Item;
 
 class InterDeploy extends Component {
 
     state = {
-        pattern: /((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))/,
+        pattern: /^(?:(?:2[0-4][0-9]\.)|(?:25[0-5]\.)|(?:1[0-9][0-9]\.)|(?:[1-9][0-9]\.)|(?:[0-9]\.)){3}(?:(?:2[0-5][0-5])|(?:25[0-5])|(?:1[0-9][0-9])|(?:[1-9][0-9])|(?:[0-9]))$/,
+        btnText: "修改",
+        control: true
     }
-
+    componentDidMount() {
+        this.initForm()
+    }
+    initForm = () => {
+        axios.get('/Network').then(data => {
+            // console.log(data.data);
+            let result = data.data[0]
+            this.setState({
+                "netif": result.netif
+            })
+            this.props.form.setFieldsValue({
+                LANIP: result.ip,
+                LANSubnet: result.subnet,
+                LANDefaultGateway: result.gateway
+            })
+        })
+    }
     submitForm = (e) => {
         e.preventDefault();
+        // 重置form
+        // this.props.form.resetFields()
+        this.setState({
+            control: false,
+            btnText: "完成"
+        })
+        if (this.state.control) return
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
-                message.success('成功')
+                // console.log('Received values of form: ', values);
+                this.setState({
+                    control: true,
+                    btnText: "修改"
+                })
+                axios.post('/Network/', {
+
+                    "gateway": values.LANDefaultGateway,
+                    "ip": values.LANIP,
+                    "netif": this.state.netif,
+                    "subnet": values.LANSubnet
+                }).then(data => {
+                    // console.log(data.status);
+                    if (data.status !== 200) { 
+                        message.error('配置失败')
+                        return
+                    }
+                    this.initForm()
+                    message.success('配置成功')
+                })
             }
         });
     }
@@ -24,75 +68,7 @@ class InterDeploy extends Component {
         return (
             <Form className='inter-deploy' onSubmit={this.submitForm}>
                 <div className="form">
-                    {/* <div className="left">
-                        <div className="tit">
-                            <span className="value">WAN配置</span>
-                            <span className="warn"><span>*</span><span>必填项目</span></span>
-                        </div>
-                        <FormItem
-                            label="IP地址"
-                        >
-                            {getFieldDecorator('WANIP', {
-                                rules: [{ required: true, message: 'IP地址不能为空' }, {pattern: this.state.pattern, message: 'IP地址格式不正确'}],
-                            })(
-                                <Input />
-                            )}
-                        </FormItem>
-                        <FormItem
-                            label="子网掩码"
-                        >
-                            {getFieldDecorator('WANSubnet', {
-                                rules: [{ required: true, message: '子网掩码不能为空' }],
-                            })(
-                                <Input />
-                            )}
-                        </FormItem>
-                        <FormItem
-                            label="默认网关"
-                        >
-                            {getFieldDecorator('WANDefaultGateway', {
-                                rules: [{ required: true, message: '默认网关不能为空' }],
-                            })(
-                                <Input />
-                            )}
-                        </FormItem>
-                        <FormItem
-                            label="DNS"
-                        >
-                            {getFieldDecorator('WANDNS', {
-                                rules: [{ required: false, message: '' }],
-                            })(
-                                <Input />
-                            )}
-                        </FormItem>
-                        <FormItem
-                            label="NTO"
-                        >
-                            {getFieldDecorator('WANNTO', {
-                                rules: [{ required: true, message: 'NTO不能为空' }],
-                            })(
-                                <Input />
-                            )}
-                        </FormItem>
-                        <FormItem
-                            label="服务器IP"
-                        >
-                            {getFieldDecorator('WANServerIP', {
-                                rules: [{ required: true, message: '服务器IP不能为空' }, {pattern: this.state.pattern, message: 'IP地址格式不正确'}],
-                            })(
-                                <Input />
-                            )}
-                        </FormItem>
-                        <FormItem
-                            label="安装地址"
-                        >
-                            {getFieldDecorator('WANPosition', {
-                                rules: [{ required: true, message: '安装地址不能为空' }],
-                            })(
-                                <Input />
-                            )}
-                        </FormItem>
-                    </div> */}
+
                     <div className="right">
                         <div className="tit">
                             <span className="value">LAN配置</span>
@@ -102,9 +78,9 @@ class InterDeploy extends Component {
                             label="IP地址"
                         >
                             {getFieldDecorator('LANIP', {
-                                rules: [{ required: true, message: 'IP地址不能为空' }, {pattern: this.state.pattern, message: 'IP地址格式不正确'}],
+                                rules: [{ required: true, message: 'IP地址不能为空' }, { pattern: this.state.pattern, message: 'IP地址格式不正确' }],
                             })(
-                                <Input autoComplete='off'/>
+                                <Input disabled={this.state.control} autoComplete='off' />
                             )}
                         </FormItem>
                         <FormItem
@@ -113,7 +89,7 @@ class InterDeploy extends Component {
                             {getFieldDecorator('LANSubnet', {
                                 rules: [{ required: true, message: '子网掩码不能为空' }],
                             })(
-                                <Input autoComplete='off'/>
+                                <Input disabled={this.state.control} autoComplete='off' />
                             )}
                         </FormItem>
                         <FormItem
@@ -122,7 +98,7 @@ class InterDeploy extends Component {
                             {getFieldDecorator('LANDefaultGateway', {
                                 rules: [{ required: true, message: '默认网关不能为空' }],
                             })(
-                                <Input autoComplete='off'/>
+                                <Input disabled={this.state.control} autoComplete='off' />
                             )}
                         </FormItem>
                     </div>
@@ -131,9 +107,7 @@ class InterDeploy extends Component {
                     <FormItem
                         wrapperCol={{ span: 12, offset: 1 }}
                     >
-                        <Button type="primary" htmlType="submit">
-                            完成
-                        </Button>
+                        <Button type="primary" htmlType="submit">{this.state.btnText}</Button>
                     </FormItem>
                 </div>
             </Form>

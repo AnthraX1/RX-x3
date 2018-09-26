@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Pagination } from 'antd'
+// import { Button, Pagination } from 'antd'
 import DeleteModal from './../../components/DeleteModal'
 import WayInfoModal from './WayInfoModal'
 import './index.scss'

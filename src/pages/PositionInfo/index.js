@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Button, Pagination } from 'antd'
+import { Pagination } from 'antd'
 import './index.scss'
 import DeleteModal from './../../components/DeleteModal'
-import PositionModal from './positionModal'
+// import PositionModal from './positionModal'
 
 class PositionInfo extends Component {
     state = {

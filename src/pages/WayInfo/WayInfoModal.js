@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Modal, Form, Select, Input, Button, Row, Col } from 'antd';
+import { Modal, Form, Select, Button, Row, Col } from 'antd';
 import './WayInfoModal.scss'
 
 const FormItem = Form.Item;

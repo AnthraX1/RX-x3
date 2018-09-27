@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Modal, Form, Input, Button } from 'antd';
+import { Modal, Form, Input, Button, message } from 'antd';
+import axios from '../../config/axios.js'
 import './CameraModal.scss'
 
 const FormItem = Form.Item;
@@ -7,21 +8,33 @@ const FormItem = Form.Item;
 
 class CameraModal extends Component {
     state = {
+        pattern: /^(?:(?:2[0-4][0-9]\.)|(?:25[0-5]\.)|(?:1[0-9][0-9]\.)|(?:[1-9][0-9]\.)|(?:[0-9]\.)){3}(?:(?:2[0-5][0-5])|(?:25[0-5])|(?:1[0-9][0-9])|(?:[1-9][0-9])|(?:[0-9]))$/,
         protocol: 'RTSP',
         control: 'RTSP'
     }
+    componentDidMount() {
+        this.props.initForm(this)
+    }
     componentWillReceiveProps(nextProps) {
-        // console.log(nextProps);
         this.setState({
-            visible: nextProps.visible
+            visible: nextProps.visible,
+            data: nextProps.data
         })
     }
-
+    initForm = (item) => {
+        if(!item) return
+        this.props.form.setFieldsValue({
+            name: item.name,
+            ip: item.ip,
+            RTSP: item.protocol
+        })
+    }
     handleCancel = (e) => {
         this.setState({
             visible: false,
         });
         this.props.sonCarmeraModal(false)
+        
     }
     protocolChange = (e) => {
         // console.log(e.target.value);
@@ -41,6 +54,21 @@ class CameraModal extends Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
+                console.log(this.state.data);
+                axios.post('/Camera/',{
+                    ...this.state.data,
+                    name: values.name,
+                    ip: values.ip,
+                    protocol: values.RTSP
+                }).then(data => {
+                    console.log(data);
+                    if(data.status !== 200) {
+                        message.error('更新失败')
+                    }else {
+                        message.success('更新成功')
+                        this.handleCancel()
+                    }
+                })
             }
         })
     }
@@ -48,7 +76,7 @@ class CameraModal extends Component {
         // console.log(e.target.value);
         let value = e.target.value
         this.props.form.setFieldsValue({
-            RTSP: `rtsp://admin:abc123456@${value}/h264/ch1/main/av_stream`
+            RTSP: `rtsp://admin:abc123456@${value}:554`
         })
     }
     render() {
@@ -106,7 +134,7 @@ class CameraModal extends Component {
 
                     >
                         {getFieldDecorator('ip', {
-                            rules: [{ required: true, message: '摄像头IP不能为空' }],
+                            rules: [{ required: true, message: '摄像头IP不能为空' },{ pattern: this.state.pattern, message: 'IP地址格式不正确' }],
 
                         })(
                             <Input onChange={this.change} autoComplete='off' />
@@ -190,7 +218,7 @@ class CameraModal extends Component {
                                 >
                                     {getFieldDecorator('RTSP', {
                                         rules: [{ required: true, message: 'RTSP地址不能为空' }],
-                                        initialValue: ''
+                                        initialValue: 'rtsp://admin:abc123456@:544'
                                     })(
                                         <Input disabled />
                                     )}

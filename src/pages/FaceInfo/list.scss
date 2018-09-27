@@ -1,5 +1,12 @@
 .face-id-list{
     .ant-drawer-body{
+        .search {
+            display: flex;
+            margin-bottom: 10px;
+            button{
+                margin-left: 30px;
+            }
+        }
         .layout{
             display: flex;
             text-align: center;

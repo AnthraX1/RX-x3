@@ -39,8 +39,12 @@
                 width: 70px;
             }
             .protocol {
-                //   width: 150px;
-                flex: 1;
+                  width: 150px;
+                  p{
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                  }
             }
             .link-state {
                 //   width: 120px;

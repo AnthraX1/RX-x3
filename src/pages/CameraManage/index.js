@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 // import { Button, Pagination } from 'antd'
+import axios from '../../config/axios.js'
 import './index.scss'
 import CameraModal from './CameraModal'
 import TestModal from './../../components/TestModal'
@@ -14,6 +15,28 @@ class CameraManage extends Component {
         testModalVisible: false,
         deleteModalVisible: false,
         modelTitle: '添加摄像头'
+    }
+    componentDidMount() {
+        this.listDom()
+    }
+    asyncData = async () => {
+        return new Promise((res, rej) => {
+            axios.get('/Camera/').then(data => {
+                if(data.status !== 200) {
+                    rej(data)
+                }else {
+                    let result = data.data
+                    res(result)
+                }
+            })
+        })
+    }
+    // initModel窗
+    initForm = (CameraModal) => {
+        console.log(CameraModal);
+        this.setState({
+            CameraModal
+        })
     }
     showModal = () => {
         this.setState({
@@ -41,15 +64,21 @@ class CameraManage extends Component {
             deleteModalVisible: false
         });
     }
-    restCarmera =()=> {
+    restCarmera = (item) => {
+        // console.log(item);
+        this.state.CameraModal.initForm(item)
         this.setState({
             visible: true,
-            modelTitle: '修改摄像头'
+            modelTitle: '修改摄像头',
+            clickItem: item
         });
     }
     sonCarmeraModal = (control) => {
         this.setState({
             visible: control
+        }, () => {
+            // 模态框关闭的时候刷新一下列表信息
+            this.listDom()
         });
     }
 
@@ -59,21 +88,21 @@ class CameraManage extends Component {
     }
 
 
-    listDom = () => {
-        let arr = [1, 1]
-
-        let dom = arr.map((item, index) => {
+    listDom = async () => {
+        let result = await this.asyncData()
+        console.log(result);
+        let dom = result.map((item, index) => {
             return (
                 <div className="line layout" key={index}>
                     <div className="index">{index + 1}</div>
-                    <div className="name">sonyx54</div>
-                    <div className="maker">索尼索尼</div>
-                    <div className="id">234MFHS435K</div>
-                    <div className="ip">192.168.0.1</div>
-                    <div className="port">8088</div>
+                    <div className="name">{item.name}</div>
+                    <div className="maker">{item.prod}</div>
+                    <div className="id">{item.sn}</div>
+                    <div className="ip">{item.ip}</div>
+                    {/* <div className="port">8088</div> */}
                     <div className="protocol">
-                        <p>RTSP</p>
-                        <p>RTSP地址:<span>192.23.43.4</span></p>
+                        <p>RTSP地址:</p>
+                        <p title={item.protocol}><span>{item.protocol}</span></p>
                     </div>
                     <div className="link-state">
                         <p>视频连接:<span>正常</span></p>
@@ -83,13 +112,15 @@ class CameraManage extends Component {
                         <span onClick={this.linkTest} className='blue'>测试</span>
                     </div>
                     <div className="operate">
-                        <span onClick={this.restCarmera} className='blue'>配置</span>
+                        <span onClick={this.restCarmera.bind(this,item)} className='blue'>配置</span>
                         {/* <span onClick={this.deleteCarmera} className='red'>删除</span> */}
                     </div>
                 </div>
             )
         })
-        return dom
+        this.setState({
+            dom
+        })
     }
 
     render() {
@@ -106,31 +137,33 @@ class CameraManage extends Component {
                         <div className="maker">摄像头厂商</div>
                         <div className="id">摄像头序列号</div>
                         <div className="ip">摄像头ip</div>
-                        <div className="port">端口号</div>
+                        {/* <div className="port">端口号</div> */}
                         <div className="protocol">勾流方式</div>
                         <div className="link-state">连接状态</div>
                         <div className="link-test">连接测试</div>
                         <div className="operate">操作</div>
                     </div>
                     {/* 添加修改摄像头模态框 */}
-                    <CameraModal 
-                        visible={this.state.visible} 
-                        title= {this.state.modelTitle} 
-                        sonCarmeraModal = {this.sonCarmeraModal}
+                    <CameraModal
+                        data={this.state.clickItem}
+                        initForm = {this.initForm}
+                        visible={this.state.visible}
+                        title={this.state.modelTitle}
+                        sonCarmeraModal={this.sonCarmeraModal}
                     />
                     {/* 测试模态框 */}
-                    <TestModal 
-                        modelType = "type1"
-                        visible = {this.state.testModalVisible}
-                        sonLinkTest = {this.sonLinkTest}
+                    <TestModal
+                        modelType="type1"
+                        visible={this.state.testModalVisible}
+                        sonLinkTest={this.sonLinkTest}
                     />
                     {/* 删除模态框 */}
-                    <DeleteModal 
-                        visible = {this.state.deleteModalVisible}
-                        sonDeleteModal = {this.sonDeleteModal}
+                    <DeleteModal
+                        visible={this.state.deleteModalVisible}
+                        sonDeleteModal={this.sonDeleteModal}
                     />
                     <div className="body">
-                        {this.listDom()}
+                        {this.state.dom}
                     </div>
                 </div>
                 <div className="page">

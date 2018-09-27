@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Drawer } from 'antd'
+import { Drawer, Input, Button } from 'antd'
 import './list.scss'
 class List extends Component {
     state = {
@@ -38,6 +38,10 @@ class List extends Component {
                 onClose={this.onClose}
                 visible={this.state.visible}
             >
+                <div className="search">
+                    <Input placeholder='请输入您想查询的face id'></Input>
+                    <Button>搜索</Button>
+                </div>
                 <div className="tit layout">
                     <div className="index">序号</div>
                     <div className="face-id">face id</div>

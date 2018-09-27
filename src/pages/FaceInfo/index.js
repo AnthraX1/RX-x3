@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Pagination, Button } from 'antd'
+import { Button } from 'antd'
 import FaceDB from './download.js'
 import List from './list.js'
 import DeleteModal from './../../components/DeleteModal'
+import axios from './../../config/axios.js'
 
 import './index.scss'
 
@@ -11,9 +12,15 @@ class FaceInfo extends Component {
     state = {
         visible: false,
         DeleteModalVisible: false,
-        listModalVisible: false
+        listModalVisible: false,
+        databaseUrl: ''
     }
-
+    componentDidMount() {
+        this.list()
+    }
+    asyncFaceInfoList = async () => {
+        return axios.get('/FaceDb/')
+    }
     faceDBMOdal =() => {
         this.setState({
             visible: true
@@ -34,9 +41,11 @@ class FaceInfo extends Component {
             DeleteModalVisible: false
         })
     }
-    showList = () => {
+    showList = (item) => {
+        // console.log(item);
         this.setState({
-            listModalVisible: true
+            listModalVisible: true,
+            listItem: item
         })
     }
     sonListModal = () => {
@@ -44,29 +53,44 @@ class FaceInfo extends Component {
             listModalVisible: false
         })
     }
-    list = () => {
-        let arr = [1,2,3,4,5,6]
-        return arr.map((item,index) => {
+    pageChange = (e) => {
+        console.log(e);
+    }
+    list = async () => {
+        let { data } = await this.asyncFaceInfoList()
+        console.log(data);
+        // let arr = [1,2,3,4,5,6]
+        let listDom = data.map((item,index) => {
             return (
-                <div className="line layout" key={item}>
+                <div className="line layout" key={index}>
                     <div className="index">{index+1}</div>
                     <div className="name">万科小区1期通行库</div>
-                    <div className="type">白名单</div>
-                    <div className="source">后台下发</div>
+                    {/* <div className="type">白名单</div> */}
+                    <div className="source">{item.db}</div>
                     <div className="position">
-                        <p>万科小区北大门</p>
-                        <p>万科小区1栋2单元</p>
+                        {
+                            item.location.map((item,index) => {
+                                return (
+                                    <p key={index+ "_"}>{item}</p>
+                                )
+                            })
+                        }
+                        {/* <p>万科小区北大门</p>
+                        <p>万科小区1栋2单元</p> */}
                     </div>
                     <div className="count">
-                        <p>人数:46人</p>
-                        <p>照片:55张</p>
+                        <p>人数:{item.person}人</p>
+                        <p>照片:{item.photo}张</p>
                     </div>
                     <div className="operate">
-                        <span onClick={this.showList}>查看</span>
+                        <span onClick={this.showList.bind(this, item)}>查看</span>
                         <span onClick={this.deleteModal}>本地删除</span>
                     </div>
                 </div>
             )
+        })
+        this.setState({
+            listDom
         })
     }
 
@@ -80,7 +104,7 @@ class FaceInfo extends Component {
                     <div className="title layout">
                         <div className="index">序号</div>
                         <div className="name">通行库名称</div>
-                        <div className="type">库类型</div>
+                        {/* <div className="type">库类型</div> */}
                         <div className="source">库来源</div>
                         <div className="position">位置信息</div>
                         <div className="count">人脸库统计</div>
@@ -100,15 +124,16 @@ class FaceInfo extends Component {
                         />
                         {/* 人脸库列表 */}
 
-                        <List 
+                        <List
+                            listItem = {this.state.listItem}
                             visible = {this.state.listModalVisible}
                             sonListModal = {this.sonListModal}
                         />
-                        {this.list()}
+                        {this.state.listDom}
                     </div>
                 </div>
                 <div className="page">
-                    <Pagination onChange={this.pageChange} defaultCurrent={1} total={500} />
+                    {/* <Pagination onChange={this.pageChange} defaultCurrent={1} total={500} /> */}
                 </div>
             </div>
         );

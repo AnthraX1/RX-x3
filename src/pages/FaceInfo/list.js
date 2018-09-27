@@ -1,15 +1,28 @@
 import React, { Component } from 'react';
-import { Drawer, Input, Button } from 'antd'
+import { Pagination, Drawer, Input, Button } from 'antd'
 import './list.scss'
+import axios from './../../config/axios.js';
 class List extends Component {
     state = {
         visible: false,
-        childrenDrawer: false
+        childrenDrawer: false,
+        defaultNum: 10
     };
     componentWillReceiveProps(props) {
+        console.log(this.state);
         this.setState({
-            visible: props.visible
+            visible: props.visible,
+            listItem: props.listItem
+        }, () => {
+            if (this.state.listItem && this.state.visible) {
+                console.log('节流请求');
+                this.peopleList(this.state.listItem.db, this.state.defaultNum, 1)
+            }
         })
+
+    }
+    asyncPeopleList = async (db, num, page) => {
+        return axios.get(`/FaceDb/${db}/${(page - 1) * num}/${num}`)
     }
     onClose = () => {
         this.setState({
@@ -17,16 +30,48 @@ class List extends Component {
         });
         this.props.sonListModal(false)
     };
-    showChildrenDrawer = () => {
+    showChildrenDrawer = (item) => {
+        console.log(item);
         this.setState({
             childrenDrawer: true,
         });
+        this.imgList(item)
     };
     onChildrenDrawerClose = () => {
         this.setState({
             childrenDrawer: false,
         });
     };
+    pageChange = (e) => {
+        console.log(e);
+        this.peopleList(this.state.listItem.db, this.state.defaultNum, e)
+    }
+    peopleList = async (db, num, page) => {
+        let { data } = await this.asyncPeopleList(db, num, page)
+        console.log("data",data);
+        let peopleListDom = data.map((item,index) => {
+            return (
+                <div className="line layout" key={index}>
+                    <div className="index">{index+1}</div>
+                    <div className="face-id">{item.face}</div>
+                    <div className="examine" onClick={this.showChildrenDrawer.bind(this,item)}>查看</div>
+                </div>
+            )
+        })
+        this.setState({
+            peopleListDom
+        })
+    }
+    imgList =async (item) => {
+        let imgDom = item.image.map((item,index) => {
+            return (
+                <img src={item} alt="" key={index}/>
+            )
+        })
+        this.setState({
+            imgDom
+        })
+    }
     render() {
         return (
             <Drawer
@@ -48,11 +93,15 @@ class List extends Component {
                     <div className="examine">查看人脸库</div>
                 </div>
                 <div className="body">
-                    <div className="line layout">
+                    {/* <div className="line layout">
                         <div className="index">1</div>
                         <div className="face-id">abc124312-dsaf</div>
                         <div className="examine" onClick={this.showChildrenDrawer}>查看</div>
-                    </div>
+                    </div> */}
+                    {this.state.peopleListDom}
+                </div>
+                <div className="page">
+                    <Pagination onChange={this.pageChange} defaultCurrent={1} total={20} />
                 </div>
 
                 {/* 二级抽屉 */}
@@ -65,16 +114,7 @@ class List extends Component {
                     onClose={this.onChildrenDrawerClose}
                     visible={this.state.childrenDrawer}
                 >
-                    <img src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1176987195,174235917&fm=27&gp=0.jpg" alt=""/>
-                    <img src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1176987195,174235917&fm=27&gp=0.jpg" alt=""/>
-                    <img src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1176987195,174235917&fm=27&gp=0.jpg" alt=""/>
-                    <img src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1176987195,174235917&fm=27&gp=0.jpg" alt=""/>
-                    <img src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1176987195,174235917&fm=27&gp=0.jpg" alt=""/>
-                    <img src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1176987195,174235917&fm=27&gp=0.jpg" alt=""/>
-                    <img src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1176987195,174235917&fm=27&gp=0.jpg" alt=""/>
-                    <img src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1176987195,174235917&fm=27&gp=0.jpg" alt=""/>
-                    <img src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1176987195,174235917&fm=27&gp=0.jpg" alt=""/>
-                    <img src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1176987195,174235917&fm=27&gp=0.jpg" alt=""/>
+                    {this.state.imgDom}
                 </Drawer>
             </Drawer>
         );

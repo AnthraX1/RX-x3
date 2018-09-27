@@ -16,6 +16,7 @@ class CameraModal extends Component {
         this.props.initForm(this)
     }
     componentWillReceiveProps(nextProps) {
+        console.log(nextProps);
         this.setState({
             visible: nextProps.visible,
             data: nextProps.data

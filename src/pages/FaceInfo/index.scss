@@ -67,11 +67,20 @@
                         color: #F5222D;
                     }
                 }
-                .position,
+                .position {
+                    overflow: auto;
+                    padding: 2px 0;
+                    p {
+                        margin-bottom: 0;
+                        line-height: 22px;
+                    }
+                }
+                
                 .count {
                     display: flex;
                     flex-direction: column;
                     justify-content: center;
+                    
                     p {
                         margin-bottom: 0;
                         line-height: 22px;

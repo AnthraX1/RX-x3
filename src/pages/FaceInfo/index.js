@@ -13,7 +13,9 @@ class FaceInfo extends Component {
         visible: false,
         DeleteModalVisible: false,
         listModalVisible: false,
-        databaseUrl: ''
+        listItem: {
+            person: 0
+        }
     }
     componentDidMount() {
         this.list()
@@ -58,7 +60,7 @@ class FaceInfo extends Component {
     }
     list = async () => {
         let { data } = await this.asyncFaceInfoList()
-        console.log(data);
+        // console.log(data);
         // let arr = [1,2,3,4,5,6]
         let listDom = data.map((item,index) => {
             return (

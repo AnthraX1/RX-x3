@@ -6,20 +6,21 @@ class List extends Component {
     state = {
         visible: false,
         childrenDrawer: false,
-        defaultNum: 10
+        pageSize: 2,
+        totalNum: 0
     };
     componentWillReceiveProps(props) {
-        console.log(this.state);
+        // console.log(this.state);
         this.setState({
             visible: props.visible,
-            listItem: props.listItem
+            listItem: props.listItem,
+            totalNum: props.listItem.person
         }, () => {
             if (this.state.listItem && this.state.visible) {
-                console.log('节流请求');
-                this.peopleList(this.state.listItem.db, this.state.defaultNum, 1)
+                // console.log('节流请求')
+                this.peopleList(this.state.listItem.db, this.state.pageSize, 1)
             }
         })
-
     }
     asyncPeopleList = async (db, num, page) => {
         return axios.get(`/FaceDb/${db}/${(page - 1) * num}/${num}`)
@@ -31,7 +32,7 @@ class List extends Component {
         this.props.sonListModal(false)
     };
     showChildrenDrawer = (item) => {
-        console.log(item);
+        // console.log(item);
         this.setState({
             childrenDrawer: true,
         });
@@ -42,17 +43,16 @@ class List extends Component {
             childrenDrawer: false,
         });
     };
-    pageChange = (e) => {
-        console.log(e);
-        this.peopleList(this.state.listItem.db, this.state.defaultNum, e)
+    pageChange = (page) => {
+        this.peopleList(this.state.listItem.db, this.state.pageSize, page)
     }
     peopleList = async (db, num, page) => {
         let { data } = await this.asyncPeopleList(db, num, page)
-        console.log("data",data);
+        // console.log("data",data);
         let peopleListDom = data.map((item,index) => {
             return (
                 <div className="line layout" key={index}>
-                    <div className="index">{index+1}</div>
+                    <div className="index">{(index+1) + (page-1) * this.state.pageSize}</div>
                     <div className="face-id">{item.face}</div>
                     <div className="examine" onClick={this.showChildrenDrawer.bind(this,item)}>查看</div>
                 </div>
@@ -101,7 +101,7 @@ class List extends Component {
                     {this.state.peopleListDom}
                 </div>
                 <div className="page">
-                    <Pagination onChange={this.pageChange} defaultCurrent={1} total={20} />
+                    <Pagination onChange={this.pageChange} defaultCurrent={1} pageSize={this.state.pageSize} total={this.state.totalNum} />
                 </div>
 
                 {/* 二级抽屉 */}

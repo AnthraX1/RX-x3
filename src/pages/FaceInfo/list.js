@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Pagination, Drawer, Input, Button } from 'antd'
+import Zmage from 'react-zmage'
 import './list.scss'
 import axios from './../../config/axios.js';
 class List extends Component {
@@ -65,7 +66,7 @@ class List extends Component {
     imgList =async (item) => {
         let imgDom = item.image.map((item,index) => {
             return (
-                <img src={item} alt="" key={index}/>
+                <Zmage zIndex={19267} src={item} alt="" key={index}/>
             )
         })
         this.setState({

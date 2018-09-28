@@ -15,11 +15,11 @@
                 font-size: 12px;
                 margin: 0 10px;
             }
-            
         }
         .btn {
             flex: 1;
             margin-left: 30px;
+            
         }
     }
     .layout {
@@ -39,6 +39,9 @@
         }
         .direction {
             flex: 1; // width: 40px;
+        }
+        .Snap-Shot{
+            flex: 1.5;
         }
         .contrast {
             flex: 2;
@@ -63,13 +66,32 @@
             &:hover {
                 background-color: #e6f7ff;
             }
+            .Snap-Shot {
+                .get-img {
+                    color: #666666; // font-size: 0;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding-top: 10px;
+                    img {
+                        width: 50px;
+                        height: 60px;
+                        vertical-align: middle;
+                        margin: 0 10px;
+                    }
+                    .proportion {
+                        font-size: 12px;
+                        height: 12px;
+                        line-height: 18px;
+                    }
+                }
+            }
             .contrast {
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                .get-img, .save-img {
-                    color: #666666;
-                    // font-size: 0;
+                .save-img {
+                    color: #666666; // font-size: 0;
                     display: flex;
                     flex-direction: column;
                     img {
@@ -78,13 +100,21 @@
                         vertical-align: middle;
                         margin: 0 10px;
                     }
-                    .proportion{
+                    .proportion {
                         font-size: 12px;
-                        height: 12px;
+                        height: 18px;
                         line-height: 18px;
+                        
+                    }
+                    .examine{
+                        cursor: pointer;
+                        color: #0594FE;
+                        user-select: none;
+                        &:active{
+                           color: rgb(3, 103, 179);
+                        }
                     }
                 }
-                
             }
         }
     }

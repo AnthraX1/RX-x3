@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { DatePicker, Pagination, Input, Button, Icon } from 'antd'
+import Zmage from 'react-zmage'
 import locale from 'antd/lib/date-picker/locale/zh_CN';
 import './index.scss'
 
@@ -28,7 +29,7 @@ class SystemLog extends Component {
                     {/* <div className="record">开门</div> */}
                     <div className="direction">进</div>
                     <div className="contrast">
-                            <img src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1176987195,174235917&fm=27&gp=0.jpg" alt="" />
+                            <Zmage src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1176987195,174235917&fm=27&gp=0.jpg" alt="" />
                     </div>
                 </div>
             )

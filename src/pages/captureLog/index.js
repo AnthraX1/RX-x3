@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { DatePicker, Pagination, Input, Button, Icon } from 'antd'
 import Zmage from 'react-zmage'
+import server from '../../config/api.js'
 import locale from 'antd/lib/date-picker/locale/zh_CN';
 import './index.scss'
 
@@ -8,19 +9,28 @@ const { RangePicker } = DatePicker;
 
 
 class SystemLog extends Component {
-
+    state = {}
+    componentDidMount() {
+        this.list()
+    }
     onChange = (value, dateString) => {
-        console.log('Selected Time: ', value);
-        console.log('Formatted Selected Time: ', dateString);
+        // console.log('Selected Time: ', value);
+        // console.log('Formatted Selected Time: ', dateString);
     }
-
+    
     onOk = (value) => {
-        console.log('onOk: ', value);
+        console.log(value);
+        let data0 = new Date(value[0]._d)
+        let data1 = new Date(value[1]._d)
     }
 
-    list = () => {
-        let arr = [1, 2, 3, 4, 5]
-        return arr.map((item,index) => {
+    
+
+    list = async () => {
+        let { data } = await server.faceLog()
+        console.log(data);
+        // let arr = [1, 2, 3, 4, 5]
+        let listDom = data.map((item, index) => {
             return (
                 <div className='layout list' key={index}>
                     <div className="operate-data">2017-09-21 12:32</div>
@@ -29,11 +39,12 @@ class SystemLog extends Component {
                     {/* <div className="record">开门</div> */}
                     <div className="direction">进</div>
                     <div className="contrast">
-                            <Zmage src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1176987195,174235917&fm=27&gp=0.jpg" alt="" />
+                        <Zmage src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1176987195,174235917&fm=27&gp=0.jpg" alt="" />
                     </div>
                 </div>
             )
         })
+        this.setState({listDom})
     }
     render() {
         return (
@@ -52,12 +63,12 @@ class SystemLog extends Component {
                             />
                         </div>
                     </div>
-                    <div>
+                    {/* <div>
                         <div className="key">人脸库: </div>
                         <div className="value">
                             <Input></Input>
                         </div>
-                    </div>
+                    </div> */}
                     <div>
                         <div className="key">通道信息:</div>
                         <div className="value">
@@ -77,7 +88,7 @@ class SystemLog extends Component {
                     <div className="contrast">照片(抓拍照片vs比对库照片)</div>
                 </div>
                 <div className="body">
-                    {this.list()}
+                    {this.state.listDom}
                 </div>
                 <div className="page">
                     <Pagination defaultCurrent={1} total={50} />

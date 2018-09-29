@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { DatePicker, Pagination, Input, Button, Icon, Popover } from 'antd'
 // 点击放大图片插件
 import Zmage from 'react-zmage'
+import server from '../../config/api.js'
+import tool from './../../tools'
 import locale from 'antd/lib/date-picker/locale/zh_CN';
 import './index.scss'
 
@@ -9,7 +11,10 @@ const { RangePicker } = DatePicker;
 
 
 class SystemLog extends Component {
-
+    state = {}
+    componentDidMount() {
+        this.list()
+    }
     onChange = (value, dateString) => {
         console.log('Selected Time: ', value);
         console.log('Formatted Selected Time: ', dateString);
@@ -18,9 +23,9 @@ class SystemLog extends Component {
     onOk = (value) => {
         console.log('onOk: ', value);
     }
-    infoModel = (info = {type: '身份证', id:'41101321100011222222224'}) => {
+    infoModel = (info = {db: '****', face:'*****'}) => {
         let spanStyle = {
-            width: '60px',
+            width: '40px',
             display: 'inline-block',
             textAlignLast: 'justify',
             marginRight: '10px'
@@ -30,57 +35,51 @@ class SystemLog extends Component {
         }
         return (
             <div>
-                <div><span style={spanStyle}>证件类型:</span><span style={wordStyle}>{info.type}</span></div>
-                <div><span style={spanStyle}>证件号:</span><span style={wordStyle}>{info.id}</span></div>
+                <div><span style={spanStyle}>来源:</span><span style={wordStyle}>{info.db}</span></div>
+                <div><span style={spanStyle}>id :</span><span style={wordStyle}>{info.face}</span></div>
             </div>
         )
     }
-    list = () => {
-        let arr = [1, 2, 3, 4, 5]
-        return arr.map((item,index) => {
+    list =async () => {
+        let { data } =await server.faceLog()
+
+        console.log(tool.formatDate(data[0].ts*1000));
+        let formatDate = tool.formatDate
+        let listDOM=  data.map((item,index) => {
             return (
                 <div className='layout list' key={index}>
-                    <div className="operate-data">2017-09-21 12:32</div>
+                    <div className="operate-data">{formatDate(item.ts*1000)}</div>
                     {/* <div className="face-db">通行库</div> */}
-                    <div className="way-info">万科小区围墙机</div>
+                    <div className="way-info">{item.ch}</div>
                     {/* <div className="record">开门</div> */}
                     <div className="direction">进</div>
                     <div className="Snap-Shot">
                         <div className='get-img'>
-                            <Zmage src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1176987195,174235917&fm=27&gp=0.jpg" alt="" />
+                            <Zmage src={item.image} alt="" />
                             <span className='proportion'>抓拍照片</span>
                         </div>
                     </div>
                     <div className="contrast">
-                        
-                        
-                        <div className='save-img'>
-                            <Zmage src="http://pic.baike.soso.com/p/20140728/20140728113802-1762160793.jpg" alt="" />
-                            <span className='proportion'>相识度80%</span>
-                            <Popover placement="left" content={this.infoModel()} title="人物信息" trigger="click">
-                                <span className='proportion examine'>点击查看</span>
-                            </Popover>
-                        </div>
-                        <div className='save-img'>
-                            <Zmage src="http://pic.baike.soso.com/p/20140728/20140728113802-1762160793.jpg" alt="" />
-                            <span className='proportion'>相识度80%</span>
-                            <Popover placement="left" content={this.infoModel()} title="人物信息" trigger="click">
-                                <span className='proportion examine'>点击查看</span>
-                            </Popover>
-                        </div>
-                        <div className='save-img'>
-                            <Zmage src="http://pic.baike.soso.com/p/20140728/20140728113802-1762160793.jpg" alt="" />
-                            <span className='proportion'>相识度80%</span>
-                            <Popover placement="left" content={this.infoModel()} title="人物信息" trigger="click">
-                                <span className='proportion examine'>点击查看</span>
-                            </Popover>
-                        </div>
+                        {
+                            item.comps.map((item,index) => {
+                                return (
+                                    <div className='save-img' key={index + '_'}>
+                                        <Zmage src="http://pic.baike.soso.com/p/20140728/20140728113802-1762160793.jpg" alt="" />
+                                        <span className='proportion'>相识度{item.sim*100}%</span>
+                                        <Popover placement="left" content={this.infoModel(item)} title="人物信息" trigger="click">
+                                            <span className='proportion examine'>点击查看</span>
+                                        </Popover>
+                                    </div>
+                                )
+                            })
+                        }
                         
                         
                     </div>
                 </div>
             )
         })
+        this.setState({listDOM})
     }
     render() {
         return (
@@ -125,7 +124,7 @@ class SystemLog extends Component {
                     <div className="contrast">比对库照片</div>
                 </div>
                 <div className="body">
-                    {this.list()}
+                    {this.state.listDOM}
                 </div>
                 <div className="page">
                     <Pagination defaultCurrent={1} total={50} />

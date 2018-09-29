@@ -10,10 +10,10 @@ import api from '../../config/api.js';
 const { RangePicker } = DatePicker;
 
 
-class SystemLog extends Component {
+class passLog extends Component {
     state = {
         currentPage: 1,  //当前页码
-        pageSize: 10,   // 每页显示的数量
+        pageSize: 6,   // 每页显示的数量
         totalNum: 0,   // 列表总数量
         beg: 0,
         end: 0,
@@ -27,9 +27,15 @@ class SystemLog extends Component {
             ch: e.target.value
         })
     }
-
-    onOk = (value) => {
-        console.log('onOk: ', value);
+    timeChange = (value) => {
+        console.log(value);
+        if (!value.length) {
+            this.setState({
+                beg: 0,
+                end: 0
+            })
+            return
+        }
         let data0 = new Date(value[0]._d)
         let data1 = new Date(value[1]._d)
         let beg = parseInt(data0.getTime() / 1000, 10)
@@ -129,7 +135,7 @@ class SystemLog extends Component {
                                 showTime={{ format: 'HH:mm' }}
                                 format="YYYY-MM-DD HH:mm"
                                 placeholder={['开始时间', '结束时间']}
-                                onOk={this.onOk}
+                                onChange={this.timeChange}
                             />
                         </div>
                     </div>
@@ -169,4 +175,4 @@ class SystemLog extends Component {
     }
 }
 
-export default SystemLog;
+export default passLog;

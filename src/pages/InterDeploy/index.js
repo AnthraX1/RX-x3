@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Input, Button, message } from 'antd';
 import './index.scss'
-import axios from '../../config/axios.js'
+import api from '../../config/api.js'
 const FormItem = Form.Item;
 
 class InterDeploy extends Component {
@@ -14,18 +14,16 @@ class InterDeploy extends Component {
     componentDidMount() {
         this.initForm()
     }
-    initForm = () => {
-        axios.get('/Network').then(data => {
-            // console.log(data.data);
-            let result = data.data[0]
-            this.setState({
-                "netif": result.netif
-            })
-            this.props.form.setFieldsValue({
-                LANIP: result.ip,
-                LANSubnet: result.subnet,
-                LANDefaultGateway: result.gateway
-            })
+    initForm =async () => {
+        let {data} = await api.network_g()
+        let result = data[0]
+        this.setState({
+            "netif": result.netif
+        })
+        this.props.form.setFieldsValue({
+            LANIP: result.ip,
+            LANSubnet: result.subnet,
+            LANDefaultGateway: result.gateway
         })
     }
     submitForm = (e) => {
@@ -37,28 +35,26 @@ class InterDeploy extends Component {
             btnText: "完成"
         })
         if (this.state.control) return
-        this.props.form.validateFields((err, values) => {
+        this.props.form.validateFields(async (err, values) => {
             if (!err) {
                 // console.log('Received values of form: ', values);
                 this.setState({
                     control: true,
                     btnText: "修改"
                 })
-                axios.post('/Network/', {
-
+                let option = {
                     "gateway": values.LANDefaultGateway,
                     "ip": values.LANIP,
                     "netif": this.state.netif,
                     "subnet": values.LANSubnet
-                }).then(data => {
-                    // console.log(data.status);
-                    if (data.status !== 200) { 
-                        message.error('配置失败')
-                        return
-                    }
-                    this.initForm()
-                    message.success('配置成功')
-                })
+                }
+                let data = await api.network_p(option)
+                if (data.status !== 200) {
+                    message.error('配置失败')
+                    return
+                }
+                this.initForm()
+                message.success('配置成功')
             }
         });
     }

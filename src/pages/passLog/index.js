@@ -1,29 +1,55 @@
 import React, { Component } from 'react';
-import { DatePicker, Pagination, Input, Button, Icon, Popover } from 'antd'
+import { DatePicker, Pagination, Input, Button, Icon, Popover, message } from 'antd'
 // 点击放大图片插件
 import Zmage from 'react-zmage'
-import server from '../../config/api.js'
 import tool from './../../tools'
 import locale from 'antd/lib/date-picker/locale/zh_CN';
 import './index.scss'
+import api from '../../config/api.js';
 
 const { RangePicker } = DatePicker;
 
 
 class SystemLog extends Component {
-    state = {}
-    componentDidMount() {
-        this.list()
+    state = {
+        currentPage: 1,  //当前页码
+        pageSize: 10,   // 每页显示的数量
+        totalNum: 0,   // 列表总数量
+        beg: 0,
+        end: 0,
+        ch: "",
     }
-    onChange = (value, dateString) => {
-        console.log('Selected Time: ', value);
-        console.log('Formatted Selected Time: ', dateString);
+    componentDidMount() {
+        this.list(this.state.pageSize, 1)
+    }
+    inputChange = (e) => {
+        this.setState({
+            ch: e.target.value
+        })
     }
 
     onOk = (value) => {
         console.log('onOk: ', value);
+        let data0 = new Date(value[0]._d)
+        let data1 = new Date(value[1]._d)
+        let beg = parseInt(data0.getTime() / 1000, 10)
+        let end = parseInt(data1.getTime() / 1000, 10)
+        this.setState({
+            beg,
+            end
+        })
     }
-    infoModel = (info = {db: '****', face:'*****'}) => {
+    search = async () => {
+        // console.log('search');
+        this.list(this.state.pageSize, 1, this.state.ch, this.state.beg, this.state.end)
+    }
+    pageChange = (page) => {
+        this.list(this.state.pageSize, page, this.state.ch, this.state.beg, this.state.end)
+        this.setState({
+            currentPage: page
+        })
+    }
+    infoModel = (info = { db: '****', face: '*****' }) => {
         let spanStyle = {
             width: '40px',
             display: 'inline-block',
@@ -40,19 +66,26 @@ class SystemLog extends Component {
             </div>
         )
     }
-    list =async () => {
-        let { data } =await server.faceLog()
-
-        console.log(tool.formatDate(data[0].ts*1000));
+    list = async (num = 10, page = 1, ch = "", beg = 0, end = 0) => {
+        let { data } = await api.faceLog(1, num, page, ch, beg, end)
+        console.log(data);
+        this.listDom(data)
+    }
+    listDom = (data) => {
+        // console.log(data);
+        if(!data.logs) {
+            message.error('没有搜到结果')
+            return
+        }
         let formatDate = tool.formatDate
-        let listDOM=  data.map((item,index) => {
+        let listDom = data.logs.map((item, index) => {
             return (
                 <div className='layout list' key={index}>
-                    <div className="operate-data">{formatDate(item.ts*1000)}</div>
+                    <div className="operate-data">{formatDate(item.ts * 1000)}</div>
                     {/* <div className="face-db">通行库</div> */}
                     <div className="way-info">{item.ch}</div>
                     {/* <div className="record">开门</div> */}
-                    <div className="direction">进</div>
+                    {/* <div className="direction">进</div> */}
                     <div className="Snap-Shot">
                         <div className='get-img'>
                             <Zmage src={item.image} alt="" />
@@ -61,11 +94,11 @@ class SystemLog extends Component {
                     </div>
                     <div className="contrast">
                         {
-                            item.comps.map((item,index) => {
+                            item.comps.map((item, index) => {
                                 return (
                                     <div className='save-img' key={index + '_'}>
-                                        <Zmage src="http://pic.baike.soso.com/p/20140728/20140728113802-1762160793.jpg" alt="" />
-                                        <span className='proportion'>相识度{item.sim*100}%</span>
+                                        <Zmage src={item.pic} alt="" />
+                                        <span className='proportion'>相识度{item.sim * 100}%</span>
                                         <Popover placement="left" content={this.infoModel(item)} title="人物信息" trigger="click">
                                             <span className='proportion examine'>点击查看</span>
                                         </Popover>
@@ -73,13 +106,16 @@ class SystemLog extends Component {
                                 )
                             })
                         }
-                        
-                        
+
+
                     </div>
                 </div>
             )
         })
-        this.setState({listDOM})
+        this.setState({
+            listDom,
+            totalNum: data.total
+        })
     }
     render() {
         return (
@@ -93,7 +129,6 @@ class SystemLog extends Component {
                                 showTime={{ format: 'HH:mm' }}
                                 format="YYYY-MM-DD HH:mm"
                                 placeholder={['开始时间', '结束时间']}
-                                onChange={this.onChange}
                                 onOk={this.onOk}
                             />
                         </div>
@@ -107,11 +142,11 @@ class SystemLog extends Component {
                     <div>
                         <div className="key">通道信息:</div>
                         <div className="value">
-                            <Input></Input>
+                            <Input onChange={this.inputChange}></Input>
                         </div>
                     </div>
                     <div className="btn">
-                        <Button><Icon type='search'></Icon>搜索</Button>
+                        <Button onClick={this.search}><Icon type='search'></Icon>搜索</Button>
                     </div>
                 </div>
                 <div className="title layout">
@@ -119,15 +154,15 @@ class SystemLog extends Component {
                     {/* <div className="face-db">人脸库</div> */}
                     <div className="way-info">通道信息</div>
                     {/* <div className="record">行为记录</div> */}
-                    <div className="direction">方向</div>
+                    {/* <div className="direction">方向</div> */}
                     <div className="Snap-Shot">抓拍照片</div>
                     <div className="contrast">比对库照片</div>
                 </div>
                 <div className="body">
-                    {this.state.listDOM}
+                    {this.state.listDom}
                 </div>
                 <div className="page">
-                    <Pagination defaultCurrent={1} total={50} />
+                    <Pagination onChange={this.pageChange} current={this.state.currentPage} pageSize={this.state.pageSize} total={this.state.totalNum} />
                 </div>
             </div>
         );

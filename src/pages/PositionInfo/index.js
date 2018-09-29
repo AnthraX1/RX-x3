@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-// import { Pagination } from 'antd'
 import './index.scss'
 import DeleteModal from './../../components/DeleteModal'
-import axios from '../../config/axios.js'
-// import PositionModal from './positionModal'
+import api from '../../config/api.js'
 
 class PositionInfo extends Component {
     state = {
@@ -13,11 +11,6 @@ class PositionInfo extends Component {
     componentDidMount() {
         this.list()
     }
-
-    asyncData =async () => {
-        return axios.get('/Location/')
-    }
-    
     delete = () => {
         this.setState({
             deleteModalVisible: true
@@ -39,8 +32,7 @@ class PositionInfo extends Component {
         })
     }
     list =async () => {
-        let { data: result }  = await this.asyncData()
-        console.log(result);
+        let { data: result }  = await api.Location_g()
         let dom = result.map((item, index) => {
             return (
                 <div className="line layout" key={index}>

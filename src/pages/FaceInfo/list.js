@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Pagination, Drawer, Input, Button } from 'antd'
 import Zmage from 'react-zmage'
 import './list.scss'
-import axios from './../../config/axios.js';
+import api from './../../config/api.js';
 class List extends Component {
     state = {
         visible: false,
@@ -22,9 +22,6 @@ class List extends Component {
                 this.peopleList(this.state.listItem.db, this.state.pageSize, 1)
             }
         })
-    }
-    asyncPeopleList = async (db, num, page) => {
-        return axios.get(`/FaceDb/${db}/${(page - 1) * num}/${num}`)
     }
     onClose = () => {
         this.setState({
@@ -48,8 +45,7 @@ class List extends Component {
         this.peopleList(this.state.listItem.db, this.state.pageSize, page)
     }
     peopleList = async (db, num, page) => {
-        let { data } = await this.asyncPeopleList(db, num, page)
-        // console.log("data",data);
+        let { data } = await api.FaceList_g(db, num, page)
         let peopleListDom = data.map((item,index) => {
             return (
                 <div className="line layout" key={index}>

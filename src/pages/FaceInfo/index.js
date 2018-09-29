@@ -3,7 +3,7 @@ import { Button } from 'antd'
 import FaceDB from './download.js'
 import List from './list.js'
 import DeleteModal from './../../components/DeleteModal'
-import axios from './../../config/axios.js'
+import api from './../../config/api.js'
 
 import './index.scss'
 
@@ -19,9 +19,6 @@ class FaceInfo extends Component {
     }
     componentDidMount() {
         this.list()
-    }
-    asyncFaceInfoList = async () => {
-        return axios.get('/FaceDb/')
     }
     faceDBMOdal =() => {
         this.setState({
@@ -59,9 +56,7 @@ class FaceInfo extends Component {
         console.log(e);
     }
     list = async () => {
-        let { data } = await this.asyncFaceInfoList()
-        // console.log(data);
-        // let arr = [1,2,3,4,5,6]
+        let { data } = await api.FaceDb_g()
         let listDom = data.map((item,index) => {
             return (
                 <div className="line layout" key={index}>
@@ -77,8 +72,6 @@ class FaceInfo extends Component {
                                 )
                             })
                         }
-                        {/* <p>万科小区北大门</p>
-                        <p>万科小区1栋2单元</p> */}
                     </div>
                     <div className="count">
                         <p>人数:{item.person}人</p>

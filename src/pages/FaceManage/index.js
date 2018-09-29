@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Input, Button, message } from 'antd'
-import axios from '../../config/axios.js'
+import api from '../../config/api.js'
 import './index.scss'
 
 const FormItem = Form.Item
@@ -13,21 +13,19 @@ class FaceManage extends Component {
     componentDidMount() {
         this.initForm()
     }
-    initForm = () => {
-        axios.get('/FaceGW/').then(data => {
-            let result = data.data[0]
-            // console.log(result);
-            this.setState({
-                result
-            })
-            this.props.form.setFieldsValue({
-                type: result.type,
-                name: result.name,
-                MAC: result.mac,
-                version: result.version,
-                MQTT: result.mqtt,
-                supportLinesNum: result.caps_ch,
-            })
+    initForm =async () => {
+        let {data} =await api.FaceGW_g()
+        let result = data[0]
+        this.setState({
+            result
+        })
+        this.props.form.setFieldsValue({
+            type: result.type,
+            name: result.name,
+            MAC: result.mac,
+            version: result.version,
+            MQTT: result.mqtt,
+            supportLinesNum: result.caps_ch,
         })
     }
     handleSubmit = (e) => {
@@ -37,14 +35,13 @@ class FaceManage extends Component {
             btnText: "完成"
         })
         if (this.state.control) return
-        this.props.form.validateFields((err, values) => {
+        this.props.form.validateFields(async (err, values) => {
             if (!err) {
                 this.setState({
                     control: true,
                     btnText: "修改"
                 })
-                // console.log('Received values of form: ', values);
-                axios.post('/FaceGW/', {
+                let option = {
                     caps_ch: this.state.result.caps_ch,
                     code: this.state.result.code,
                     mac: this.state.result.mac,
@@ -52,15 +49,14 @@ class FaceManage extends Component {
                     name: values.name,
                     type: this.state.result.type,
                     version: this.state.result.version
-                }).then(data => {
-                    // console.log(data)
-                    if(data.status !== 200) {
-                        message.error('配置失败')
-                        return
-                    }
-                    this.initForm()
-                    message.success('配置成功')
-                })
+                }
+                let data = await api.FaceGW_p(option)
+                if(data.status !== 200) {
+                    message.error('配置失败')
+                    return
+                }
+                this.initForm()
+                message.success('配置成功')
             }
         });
     }

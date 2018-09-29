@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-// import { Button, Pagination } from 'antd'
-import axios from '../../config/axios.js'
+import api from '../../config/api.js'
 import './index.scss'
 import CameraModal from './CameraModal'
 import TestModal from './../../components/TestModal'
 import DeleteModal from './../../components/DeleteModal'
-// const FormItem = Form.Item;
 
 
 class CameraManage extends Component {
@@ -19,21 +17,8 @@ class CameraManage extends Component {
     componentDidMount() {
         this.listDom()
     }
-    asyncData = async () => {
-        return new Promise((res, rej) => {
-            axios.get('/Camera/').then(data => {
-                if(data.status !== 200) {
-                    rej(data)
-                }else {
-                    let result = data.data
-                    res(result)
-                }
-            })
-        })
-    }
     // initModel窗
     initForm = (CameraModal) => {
-        console.log(CameraModal);
         this.setState({
             CameraModal
         })
@@ -89,7 +74,7 @@ class CameraManage extends Component {
 
 
     listDom = async () => {
-        let result = await this.asyncData()
+        let {data:result} = await api.Camera_g()
         console.log(result);
         let dom = result.map((item, index) => {
             return (

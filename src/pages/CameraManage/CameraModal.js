@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Modal, Form, Input, Button, message } from 'antd';
-import axios from '../../config/axios.js'
+import api from '../../config/api.js'
 import './CameraModal.scss'
 
 const FormItem = Form.Item;
@@ -16,14 +16,13 @@ class CameraModal extends Component {
         this.props.initForm(this)
     }
     componentWillReceiveProps(nextProps) {
-        console.log(nextProps);
         this.setState({
             visible: nextProps.visible,
             data: nextProps.data
         })
     }
     initForm = (item) => {
-        if(!item) return
+        if (!item) return
         this.props.form.setFieldsValue({
             name: item.name,
             ip: item.ip,
@@ -35,7 +34,7 @@ class CameraModal extends Component {
             visible: false,
         });
         this.props.sonCarmeraModal(false)
-        
+
     }
     protocolChange = (e) => {
         // console.log(e.target.value);
@@ -52,24 +51,23 @@ class CameraModal extends Component {
     }
     submit = (e) => {
         e.preventDefault();
-        this.props.form.validateFieldsAndScroll((err, values) => {
+        this.props.form.validateFieldsAndScroll(async (err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
-                console.log(this.state.data);
-                axios.post('/Camera/',{
+                // console.log('Received values of form: ', values);
+                // console.log(this.state.data);
+                let option = {
                     ...this.state.data,
                     name: values.name,
                     ip: values.ip,
                     protocol: values.RTSP
-                }).then(data => {
-                    console.log(data);
-                    if(data.status !== 200) {
-                        message.error('更新失败')
-                    }else {
-                        message.success('更新成功')
-                        this.handleCancel()
-                    }
-                })
+                }
+                let data = await api.Camera_p(option)
+                if (data.status !== 200) {
+                    message.error('更新失败')
+                } else {
+                    message.success('更新成功')
+                    this.handleCancel()
+                }
             }
         })
     }
@@ -135,7 +133,7 @@ class CameraModal extends Component {
 
                     >
                         {getFieldDecorator('ip', {
-                            rules: [{ required: true, message: '摄像头IP不能为空' },{ pattern: this.state.pattern, message: 'IP地址格式不正确' }],
+                            rules: [{ required: true, message: '摄像头IP不能为空' }, { pattern: this.state.pattern, message: 'IP地址格式不正确' }],
 
                         })(
                             <Input onChange={this.change} autoComplete='off' />

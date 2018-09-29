@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { DatePicker, Pagination, Input, Button, Icon } from 'antd'
 import Zmage from 'react-zmage'
-import server from '../../config/api.js'
+import api from '../../config/api.js'
+import tool from './../../tools'
 import locale from 'antd/lib/date-picker/locale/zh_CN';
 import './index.scss'
 
@@ -9,42 +10,58 @@ const { RangePicker } = DatePicker;
 
 
 class SystemLog extends Component {
-    state = {}
+    state = {
+        currentPage: 1,
+        pageSize:4,
+        totalNum: 0
+    }
     componentDidMount() {
-        this.list()
+        this.list(this.state.pageSize, 1)
+    }
+    pageChange = (page) => {
+        this.list(this.state.pageSize, page)
+        this.setState({
+            currentPage: page
+        })
     }
     onChange = (value, dateString) => {
         // console.log('Selected Time: ', value);
         // console.log('Formatted Selected Time: ', dateString);
     }
-    
+
+
     onOk = (value) => {
         console.log(value);
         let data0 = new Date(value[0]._d)
         let data1 = new Date(value[1]._d)
+        console.log(data0.getTime(),data1);
     }
 
-    
 
-    list = async () => {
-        let { data } = await server.faceLog()
+
+    list = async (num, page) => {
+        let { data } = await api.faceLog(0, num, page)
         console.log(data);
         // let arr = [1, 2, 3, 4, 5]
-        let listDom = data.map((item, index) => {
+        let formatDate = tool.formatDate
+        let listDom = data.logs.map((item, index) => {
             return (
                 <div className='layout list' key={index}>
-                    <div className="operate-data">2017-09-21 12:32</div>
+                    <div className="operate-data">{formatDate(item.ts*1000)}</div>
                     {/* <div className="face-db">通行库</div> */}
-                    <div className="way-info">万科小区围墙机</div>
+                    <div className="way-info">{item.ch}</div>
                     {/* <div className="record">开门</div> */}
-                    <div className="direction">进</div>
+                    {/* <div className="direction">进</div> */}
                     <div className="contrast">
-                        <Zmage src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1176987195,174235917&fm=27&gp=0.jpg" alt="" />
+                        <Zmage src={item.image} alt="" />
                     </div>
                 </div>
             )
         })
-        this.setState({listDom})
+        this.setState({
+            listDom,
+            totalNum: data.total
+        })
     }
     render() {
         return (
@@ -84,14 +101,14 @@ class SystemLog extends Component {
                     {/* <div className="face-db">人脸库</div> */}
                     <div className="way-info">通道信息</div>
                     {/* <div className="record">行为记录</div> */}
-                    <div className="direction">方向</div>
+                    {/* <div className="direction">方向</div> */}
                     <div className="contrast">照片(抓拍照片vs比对库照片)</div>
                 </div>
                 <div className="body">
                     {this.state.listDom}
                 </div>
                 <div className="page">
-                    <Pagination defaultCurrent={1} total={50} />
+                    <Pagination onChange={this.pageChange} current={this.state.currentPage} pageSize={this.state.pageSize} total={this.state.totalNum} />
                 </div>
             </div>
         );

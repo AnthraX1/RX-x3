@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Form, Icon, Input, Button } from 'antd'
 import axios from '../../config/axios'
+import { connect } from 'react-redux'
+import { userName } from './../../redux/action'
+
 
 import './index.scss'
 const FormItem = Form.Item;
@@ -11,14 +14,17 @@ class Login extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
+        const { dispatch } = this.props
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
-                axios.post('/login',{
-                    values
-                }).then(data => {
-                    console.log(data);
-                })
+                // console.log('Received values of form: ', values);
+                window.sessionStorage.setItem('userInfo',values.userName)
+                dispatch(userName(values.userName))
+                // axios.post('/login',{
+                //     values
+                // }).then(data => {
+                //     console.log(data);
+                // })
                 window.location.href='#/internet/deploy'
             }
         });
@@ -60,4 +66,4 @@ class Login extends Component {
 
 
 const wrappedApp = Form.create()(Login)
-export default wrappedApp;
+export default connect()(wrappedApp);

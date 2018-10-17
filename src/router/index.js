@@ -13,11 +13,12 @@ import PositionInfo from './../pages/PositionInfo'
 import FaceInfo from './../pages/FaceInfo'
 import WayInfo from './../pages/WayInfo'
 import ProjectTest from './../pages/ProjectTest'
-// import FaceList from './../pages/FaceList'
+import Esthesis from './../pages/Esthesis'
 // import System from './../pages/System'
 import CaptureLog from './../pages/captureLog'
 import PassLog from './../pages/passLog'
 import Storage from './../pages/Storage'
+import Monitor from './../pages/Monitor'
 
 class IRouter extends React.Component {
     render() {
@@ -41,11 +42,12 @@ class IRouter extends React.Component {
                                     <Route path='/function/wayInfo' component={WayInfo} />
 
                                     <Route path='/project/projectTest' component={ProjectTest} />
-                                    {/* <Route path='/project/faceList' component={FaceList} /> */}
+                                    <Route path='/project/esthesis' component={Esthesis} />
 
                                     <Route path='/system/captureLog' component={CaptureLog} />
                                     <Route path='/system/passLog' component={PassLog} />
                                     <Route path='/system/storage' component={Storage} />
+                                    <Route path='/system/monitor' component={Monitor} />
                                     <Redirect to="/login" />
                                 </Switch>
                             </Main>

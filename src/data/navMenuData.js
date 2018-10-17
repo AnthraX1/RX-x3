@@ -62,10 +62,10 @@ const data = [
                 name: '工程测试',
                 key: '/project/projectTest'
             },
-            // {
-            //     name: '查看人脸库',
-            //     key: '/project/faceList'
-            // }
+            {
+                name: '感知系统',
+                key: '/project/esthesis'
+            }
         ]
     },
     {
@@ -84,6 +84,10 @@ const data = [
             {
                 name: '通行日记',
                 key: '/system/passLog'
+            },
+            {
+                name: '监控',
+                key: '/system/monitor'
             },
             {
                 name: '存储',

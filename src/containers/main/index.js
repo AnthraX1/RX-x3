@@ -20,7 +20,7 @@ class Main extends Component {
         })
 
 
-        
+
     }
 
     breadcrumbItem = (hash) => {
@@ -36,13 +36,15 @@ class Main extends Component {
         } else if (hash.includes('/devicedeploy/relay')) {
             item = ['设备配置', '网络继电器管理']
         } else if (hash.includes('/function/position')) {
-            item = ['设备配置', '位置信息']
+            item = ['功能管理', '位置信息']
         } else if (hash.includes('/function/faceInfo')) {
-            item = ['设备配置', '人脸库信息']
+            item = ['功能管理', '人脸库信息']
         } else if (hash.includes('/function/wayInfo')) {
-            item = ['设备配置', '通道设置']
+            item = ['功能管理', '通道设置']
         } else if (hash.includes('/project/projectTest')) {
-            item = ['设备配置', '工程测试']
+            item = ['工程操作', '工程测试']
+        } else if (hash.includes('/project/esthesis')) {
+            item = ['工程操作', '感知系统']
         } else if (hash.includes('/project/faceList')) {
             item = ['设备配置', '查看人脸库']
         } else if (hash.includes('/system/system')) {
@@ -51,6 +53,14 @@ class Main extends Component {
             item = ['设备配置', '系统日记']
         } else if (hash.includes('/system/storage')) {
             item = ['设备配置', '储存']
+        } else if (hash.includes('/system/captureLog')) {
+            item = ['系统管理', '抓拍日记']
+        } else if (hash.includes('/system/passLog')) {
+            item = ['系统管理', '通行日记']
+        } else if (hash.includes('/system/monitor')) {
+            item = ['系统管理', '监控']
+        } else if (hash.includes('/system/storage')) {
+            item = ['系统管理', '储存']
         }
 
         this.setState({

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Form, Icon, Input, Button } from 'antd'
-import axios from '../../config/axios'
+import { Form, Icon, Input, Button, message } from 'antd'
+import api from '../../config/api'
 import { connect } from 'react-redux'
 import { userName } from './../../redux/action'
 
@@ -15,17 +15,23 @@ class Login extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
         const { dispatch } = this.props
-        this.props.form.validateFields((err, values) => {
+        this.props.form.validateFields(async (err, values) => {
             if (!err) {
                 // console.log('Received values of form: ', values);
-                window.sessionStorage.setItem('userInfo',values.userName)
+                window.sessionStorage.setItem('userInfo', values.userName)
                 dispatch(userName(values.userName))
-                // axios.post('/login',{
-                //     values
-                // }).then(data => {
-                //     console.log(data);
-                // })
-                window.location.href='#/internet/deploy'
+                let option = {
+                    "password":values.password ,
+                    "user": values.userName
+                }
+                let result = await api.login(option)
+                console.log(result);
+                if(result.data.auth === 'Succ'){
+
+                    window.location.href = '#/internet/deploy'
+                }else {
+                    message.error('登录失败')
+                }
             }
         });
     }

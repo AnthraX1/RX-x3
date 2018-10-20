@@ -17,7 +17,7 @@ class Nav extends Component {
             hash = window.location.hash.replace(/#|\?.*$/g, '')
             // 刷新页面默认展开tab
             defaultOpenKey = hash.match(/\/(\S*)\//)[1]
-            console.log(defaultOpenKey,hash);
+            console.log(defaultOpenKey, hash);
             this.setState({
                 hash,
                 defaultOpenKey
@@ -46,7 +46,9 @@ class Nav extends Component {
         // Can't call setState (or forceUpdate) on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in the componentWillUnmount method.
         // 原因是因为如果页面切换路由的时候 , 页面更新state,发现组件已经卸载了,虽然不影响,但是强迫症
         // this._isMounted = false;
-
+        this.setState = (state, callback) => {
+            return;
+        };
     }
 
     menu = () => {

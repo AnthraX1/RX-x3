@@ -4,9 +4,10 @@
 import axios from 'axios'
 
 // axios 配置
-axios.defaults.timeout = 5000;
-axios.defaults.baseURL = 'http://120.55.46.197:8080/v1';
+axios.defaults.timeout = 50000;
+// axios.defaults.baseURL = 'http://120.55.46.197:8080/v1';
 // axios.defaults.baseURL = 'http://192.168.200.110:8080/v1';
+axios.defaults.baseURL = 'http://192.168.100.141:9180/v1';
 
 // http request 拦截器
 axios.interceptors.request.use(

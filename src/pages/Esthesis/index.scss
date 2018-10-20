@@ -1,0 +1,91 @@
+.esthesis {
+    .top {
+        margin-left: 30px;
+        margin-top: 10px;
+        height: 28px;
+    }
+    .table {
+        flex: 1;
+        padding: 20px 30px;
+        text-align: center;
+        .layout {
+            display: flex;
+            .index {
+                width: 40px;
+            }
+            .name {
+                flex: 1;
+                min-width: 200px;
+            }
+            .type {
+                flex: 1;
+                width: 128px;
+            }
+            .source {
+                width: 140px;
+            }
+            .position {
+                flex: 1;
+                min-width: 200px;
+            }
+            .count {
+                width: 100px;
+            }
+            .operate {
+                width: 120px;
+            }
+        }
+        .title {
+            height: 40px;
+            background-color: #fafafa;
+            line-height: 40px;
+            font-size: 12px;
+            font-weight: 700;
+            text-align: center;
+            .type {
+                font-size: 16px;
+            }
+        }
+        .body {
+            .line {
+                height: 60px;
+                color: #666666;
+                font-size: 12px;
+                line-height: 60px;
+                border-bottom: 1px solid #e8e8e8;
+                &:hover {
+                    background-color: #e6f7ff;
+                }
+                .operate {
+                    span:first-child {
+                        cursor: pointer;
+                        margin-right: 4px;
+                        color: #1890FF;
+                    }
+                    span:last-child {
+                        cursor: pointer;
+                        margin-left: 4px;
+                        color: #F5222D;
+                    }
+                }
+                .position {
+                    overflow: auto;
+                    padding: 2px 0;
+                    p {
+                        margin-bottom: 0;
+                        line-height: 22px;
+                    }
+                }
+                .count {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    p {
+                        margin-bottom: 0;
+                        line-height: 22px;
+                    }
+                }
+            }
+        }
+    }
+}

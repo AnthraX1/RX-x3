@@ -71,6 +71,10 @@ class Server {
         }
         return axios.post('/FaceLog/Query', options)
     }
+    // 下载日记接口
+    async download(options) {
+        return axios.post('/FaceLog/Download',options)
+    }
 }
 
 export default new Server()

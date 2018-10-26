@@ -16,6 +16,7 @@ class FaceManage extends Component {
     initForm =async () => {
         let {data} =await api.FaceGW_g()
         let result = data[0]
+        if(!result) return
         this.setState({
             result
         })

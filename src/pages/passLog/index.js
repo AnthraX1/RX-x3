@@ -49,9 +49,33 @@ class passLog extends Component {
         // console.log('search');
         this.list(this.state.pageSize, 1, this.state.ch, this.state.beg, this.state.end)
     }
-    download = () => {
-        console.log('下载');
+    download =async () => {
+        let options = {
+            "beg": this.state.beg,
+            "end": this.state.end,
+            "ch": this.state.ch,
+            "db": "",
+            "face": "",
+            "hit": 1,
+            "limit": 10000000000000,
+            "offset": 0
+        }
+        let { data } = await api.download(options)
+        let downloadUrl = data.Url
+        this.downloadFile(downloadUrl)
     }
+    downloadFile = (url) => {
+        var formDOM = document.createElement('form')
+        formDOM.style = 'display:none'
+        formDOM.target = ""
+        formDOM.method = "get"
+        formDOM.action = url
+        document.body.appendChild(formDOM)
+        formDOM.submit()
+        document.body.removeChild(formDOM)
+    }
+
+
     pageChange = (page) => {
         this.list(this.state.pageSize, page, this.state.ch, this.state.beg, this.state.end)
         this.setState({
@@ -82,7 +106,7 @@ class passLog extends Component {
     }
     listDom = (data) => {
         // console.log(data);
-        if(!data.logs) {
+        if (!data.logs) {
             message.error('没有搜到结果')
             return
         }

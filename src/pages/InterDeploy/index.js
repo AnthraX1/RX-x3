@@ -14,10 +14,13 @@ class InterDeploy extends Component {
     componentDidMount() {
         this.initForm()
     }
-    initForm =async () => {
-        let {data} = await api.network_g()
+    initForm = async () => {
+        let { data } = await api.network_g()
         console.log('interdeplot', data);
         let result = data[0]
+        if (!result) {
+            return
+        }
         this.setState({
             "netif": result.netif
         })
@@ -62,6 +65,10 @@ class InterDeploy extends Component {
 
     render() {
         const { getFieldDecorator } = this.props.form;
+        const formTailLayout = {
+            labelCol: { span: 8 },
+            wrapperCol: { span: 16, offset: 2 },
+        };
         return (
             <Form className='inter-deploy' onSubmit={this.submitForm}>
                 <div className="form">
@@ -73,6 +80,7 @@ class InterDeploy extends Component {
                         </div>
                         <FormItem
                             label="IP地址"
+                            {...formTailLayout}
                         >
                             {getFieldDecorator('LANIP', {
                                 rules: [{ required: true, message: 'IP地址不能为空' }, { pattern: this.state.pattern, message: 'IP地址格式不正确' }],
@@ -82,6 +90,7 @@ class InterDeploy extends Component {
                         </FormItem>
                         <FormItem
                             label="子网掩码"
+                            {...formTailLayout}
                         >
                             {getFieldDecorator('LANSubnet', {
                                 rules: [{ required: true, message: '子网掩码不能为空' }],
@@ -91,6 +100,7 @@ class InterDeploy extends Component {
                         </FormItem>
                         <FormItem
                             label="默认网关"
+                            {...formTailLayout}
                         >
                             {getFieldDecorator('LANDefaultGateway', {
                                 rules: [{ required: true, message: '默认网关不能为空' }],

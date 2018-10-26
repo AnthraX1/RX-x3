@@ -22,11 +22,19 @@ class WayInfoModal extends Component {
         this.props.initItem(this)
     }
     initItem = (item) => {
-        // console.log('item', item);
+        console.log('item', item);
         this.setState({ item })
         this.props.form.setFieldsValue({
             wayDirection: item.dir === "IN" ? "in" : "out",
-            carmeraIP: item.ipc_ip
+            carmeraIP: item.ipc_ip,
+            liminal: item.thres,
+            width: item.width,
+            height: item.height,
+            yaw: item.yaw,
+            pitch: item.pitch,
+            roll: item.roll,
+            score: item.score,
+            track: item.track
         })
     }
     handleCancel = (e) => {
@@ -54,15 +62,15 @@ class WayInfoModal extends Component {
                 let options = {
                     ...this.state.item,
                     "dir": values.wayDirection === "in" ? "IN" : "OUT",
-                    "height":parseInt(values.height),
+                    "height": parseInt(values.height, 10),
                     "ipc_ip": values.carmeraIP,
-                    "pitch": parseInt(values.pitch),
-                    "roll": parseInt(values.roll),
-                    "score": parseInt(values.score),
-                    "thres": parseInt(values.liminal),
-                    "track": parseInt(values.track),
-                    "width": parseInt(values.width),
-                    "yaw": parseInt(values.yaw)
+                    "pitch": parseInt(values.pitch, 10),
+                    "roll": parseInt(values.roll, 10),
+                    "score": parseInt(values.score, 10),
+                    "thres": parseInt(values.liminal, 10),
+                    "track": parseInt(values.track, 10),
+                    "width": parseInt(values.width, 10),
+                    "yaw": parseInt(values.yaw, 10)
                 }
                 let data = await api.Location_P(options)
                 // console.log('data', data);
@@ -126,15 +134,16 @@ class WayInfoModal extends Component {
                         {getFieldDecorator('carmeraIP', {
                             rules: [{ required: false, message: 'Please input your note!' }],
                         })(
-                            <Select
-                                showSearch
-                                optionFilterProp="children"
-                                // onChange={handleChange}
-                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                            >
-                                <Option value="1">122.141.12.15</Option>
-                                <Option value="2">192.168.147.2</Option>
-                            </Select>
+                            // <Select
+                            //     showSearch
+                            //     optionFilterProp="children"
+                            //     // onChange={handleChange}
+                            //     filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                            // >
+                            //     <Option value="1">122.141.12.15</Option>
+                            //     <Option value="2">192.168.147.2</Option>
+                            // </Select>
+                            <Input />
                         )}
                     </FormItem>
 

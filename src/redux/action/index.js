@@ -9,9 +9,9 @@ export function userName(name) {
         name
     }
 }
-export function userType(type) {
+export function userType(types) {
     return {
         type: type.USER_NAME,
-        type
+        types
     }
 }

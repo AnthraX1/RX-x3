@@ -9,15 +9,29 @@ class Esthesis extends Component {
         addModelVisible: false
     }
     componentDidMount() {
-        
+
         this.list()
         this.getInit()
     }
-   
+
+    hrefTo = () => {
+        window.sessionStorage.setItem('from',"arrange")
+        window.location.href = "#/project/projectTest"
+    }
+
+    add = () => {
+        this.setState({
+            addModelVisible: true,
+            type: "add"
+        })
+        this.state.addModel.initItem({})
+    }
+
     AddModelControl = (item) => {
         // e.preventDefault();
         this.setState({
-            addModelVisible: true
+            addModelVisible: true,
+            type: "edit"
         })
         this.state.addModel.initItem(item)
     }
@@ -32,8 +46,8 @@ class Esthesis extends Component {
         })
     }
     getInit = async () => {
-        let result = await api.esthesis_g()
-        console.log(result.data[0]);
+        let result = await api.arrange_g()
+        // console.log(result.data[0]);
         this.list(result.data)
     }
     list = (data = [{ Mac: '', Serv: '' }]) => {
@@ -49,7 +63,7 @@ class Esthesis extends Component {
                 </div>
             )
         })
-        listDOM = listDOM.slice(0, 1)
+        // listDOM = listDOM.slice(0, 1)
         this.setState({
             listDOM
         })
@@ -58,7 +72,8 @@ class Esthesis extends Component {
         return (
             <div className='esthesis'>
                 <div className="top">
-                    <Button type='primary'>导入</Button>
+                    <Button onClick={this.hrefTo} type='primary'>导入</Button>
+                    <Button onClick={this.add} className="build" type='primary'>新建</Button>
                 </div>
                 <div className="table">
                     <div className="title layout">
@@ -70,6 +85,7 @@ class Esthesis extends Component {
                     <div className="body">
                         {/* 添加感知框 */}
                         <AddModel
+                            type={this.state.type}
                             addModelVisible={this.state.addModelVisible}
                             sonaddModel={this.sonaddModel}
                             getInit={this.getInit}

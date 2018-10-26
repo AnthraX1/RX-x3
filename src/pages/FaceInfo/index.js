@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button } from 'antd'
+import { Button, message } from 'antd'
 import FaceDB from './download.js'
 import List from './list.js'
 import DeleteModal from './../../components/DeleteModal'
@@ -42,6 +42,11 @@ class FaceInfo extends Component {
     }
     showList = (item) => {
         // console.log(item);
+        let userType = window.sessionStorage.getItem('userInfo')
+        if(userType !=="admin") {
+            message.warning('管理员才有权限查看')
+            return
+        }
         this.setState({
             listModalVisible: true,
             listItem: item

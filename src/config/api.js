@@ -7,7 +7,7 @@ class Server {
     }
     // 注册接口
     async register(options) {
-        return axios.post('/SRegister/',options)
+        return axios.post('/SRegister/', options)
     }
     // 入网配置接口
     async network_g() {
@@ -56,6 +56,20 @@ class Server {
     async esthesis_p(options) {
         return axios.post('/Sense/', options)
     }
+    async esthesis_put(node, options) {
+        return axios.put(`/Sense/${node}`, options)
+    }
+    // 布控系统接口
+    async arrange_g(options) {
+        return axios.get('/Surv/')
+    }
+    async arrange_p(options) {
+        return axios.post('/Surv/', options)
+    }
+    async arrange_put(node, options) {
+        return axios.put(`/Surv/${node}`, options)
+    }
+
 
     // 通行日记和抓怕日记接口
     async faceLog(hit = 0, num = 10, page = 1, ch = "", beg = 0, end = 0) {
@@ -73,7 +87,7 @@ class Server {
     }
     // 下载日记接口
     async download(options) {
-        return axios.post('/FaceLog/Download',options)
+        return axios.post('/FaceLog/Download', options)
     }
 }
 

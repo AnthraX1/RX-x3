@@ -45,6 +45,8 @@ class Main extends Component {
             item = ['工程操作', '工程测试']
         } else if (hash.includes('/project/esthesis')) {
             item = ['工程操作', '感知系统']
+        }else if (hash.includes('/project/arrange')) {
+            item = ['工程操作', '布控系统']
         } else if (hash.includes('/project/faceList')) {
             item = ['设备配置', '查看人脸库']
         } else if (hash.includes('/system/system')) {

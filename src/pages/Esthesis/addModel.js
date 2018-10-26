@@ -14,23 +14,32 @@ class addModel extends Component {
     componentWillReceiveProps(nextProps) {
         this.setState({
             visible: nextProps.addModelVisible,
-            item: nextProps.item
+            type: nextProps.type
         })
     }
     initItem = (item) => {
         console.log(item);
-        let mac = item.Mac
-        let server = item.Serv
-        if (!item) return
-        this.props.form.setFieldsValue({
-            mac1: mac.slice(0,2),
-            mac2: mac.slice(2,4),
-            mac3: mac.slice(4,6),
-            mac4: mac.slice(6,8),
-            mac5: mac.slice(8,10),
-            mac6: mac.slice(10,12),
-            server: server.match(/(\S*):/)[1]
-        })
+        this.setState({item})
+        if ("Serv" in item) {
+            let mac = item.Mac
+            let server = item.Serv
+            if (!server.match(/(\S*):/)) {
+                message.error('数据不匹配')
+                return
+            }
+            this.props.form.setFieldsValue({
+                mac1: mac.slice(0, 2),
+                mac2: mac.slice(2, 4),
+                mac3: mac.slice(4, 6),
+                mac4: mac.slice(6, 8),
+                mac5: mac.slice(8, 10),
+                mac6: mac.slice(10, 12),
+                server: server.match(/(\S*):/)[1]
+            })
+        } else {
+            // 如果新建的话 , 重置表单
+            this.props.form.resetFields()
+        }
     }
     handleCancel = (e) => {
         this.setState({
@@ -44,12 +53,27 @@ class addModel extends Component {
         this.props.form.validateFieldsAndScroll(async (err, values) => {
             console.log(values);
             if (!err) {
-                let option = {
-                    "Mac": values.mac1 + values.mac2 + values.mac3 + values.mac4 + values.mac5 + values.mac6,
-                    "Serv": values.server
+                let type = this.state.type
+                
+                if (type === 'add') {
+                    let option = {
+                        "Mac": values.mac1 + values.mac2 + values.mac3 + values.mac4 + values.mac5 + values.mac6,
+                        "Serv": values.server,
+                    }
+                    let {data} = await api.esthesis_p(option)
+                    if(data.Node === 0) {
+                        message.error('不合法')
+                    }
+                } else if (type === 'edit') {
+                    console.log('type',this.state.item);
+                    let option = {
+                        "Mac": values.mac1 + values.mac2 + values.mac3 + values.mac4 + values.mac5 + values.mac6,
+                        "Serv": values.server,
+                        "Node": this.state.item.Node
+                    }
+                    await api.esthesis_put(this.state.item.Node, option)
                 }
-                let result = await api.esthesis_p(option)
-                console.log("result", result);
+                // console.log("result", result);
 
                 this.props.getInit()
                 this.handleCancel()
@@ -170,7 +194,7 @@ class addModel extends Component {
                                 取消
                             </Button>
                             <Button size='small' type="primary" htmlType="submit">
-                                确定
+                                {this.state.type === "edit" ? "确定" : "添加"}
                             </Button>
                         </div>
                     </FormItem>

@@ -13,13 +13,17 @@ class Heade extends Component {
             dispatch(userName(localUserInfo))
         }
     }
+    logout = () => {
+        window.sessionStorage.removeItem('userInfo')
+        window.location.href = '#/login'
+    }
     render() {
         return (
             <Header style={{ background: '#fff', padding: 0 }} >
                 <div className="left">人脸网关配置</div>
                 <div className="right">
                     <span>{this.props.userName}</span>
-                    <span>退出</span>
+                    <span onClick={this.logout}>退出</span>
                 </div>
             </Header>
         );

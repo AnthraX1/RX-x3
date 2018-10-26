@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Button, Upload, Icon, message } from 'antd'
-import TestModal from './../../components/TestModal'
+import { Button, Upload, Icon, message, Input, Select } from 'antd'
+// import TestModal from './../../components/TestModal'
 import './index.scss'
 import api from '../../config/api'
+const Option = Select.Option;
 
 class ProjectTest extends Component {
 
@@ -12,8 +13,10 @@ class ProjectTest extends Component {
         loading: false,
         wayTestControl: true,
         fileList: [],
-        fileListLenght: 0
+        fileListLenght: 0,
+        db: ''
     };
+    
 
     handleChange = (info) => {
         // console.log(info);
@@ -27,9 +30,6 @@ class ProjectTest extends Component {
     }
 
     beforeUpload = (file, fileList) => {
-        // this.state.fileList.push(file)
-        this.setState({ fileList })
-
         const reader = new FileReader();
         reader.addEventListener('load', () => {
             this.setState({
@@ -38,55 +38,45 @@ class ProjectTest extends Component {
         });
         reader.readAsDataURL(file);
 
-        // this.setState({ file })
         //  return false 改为手动上传
         return false
     }
     asyncUpload = async (files) => {
-        let _this = this
         // FormData 对象
         var form = new FormData();
         files.forEach((ele, index) => {
             let originEle = ele.originFileObj
-            // console.log(ele);
             // 文件对象
             form.append("file", originEle);
         });
         // 其他参数
-        // form.append("xxx", xxx);
         let config = {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
         }
-        // console.log(form);
         let data = await api.Upload(form, config)
-        console.log('data',data);
         if (data.status === 200) {
-            _this.setState({
-                wayTestControl: false
-            })
+            message.success('上传成功')
         }
-        // axios.post('http://192.168.100.141:9180/v1/SPic/', form, config).then(data => {
-        //     console.log('上传', data);
-        //     if (data.status === 200) {
-        //         _this.setState({
-        //             wayTestControl: false
-        //         })
-        //     }
-        // }).catch(err => {
-        // })
+
     }
     upload = () => {
+        let username = window.sessionStorage.getItem('userInfo')
         if (!this.state.imageUrl) {
             message.warning('请先选择图片');
             return
         } else if (this.state.fileListLenght > 6) {
             message.warning('单次上传不能超过6张');
             return
+        } else if (this.state.dbSelect === "") {
+            message.warning('请选择上传的库')
+            return
+        } else if(username !== 'admin'){
+            message.warning('你没有权限上传图片')
+            return
         }
 
-        // console.log('fileList', this.state.fileList);
         this.asyncUpload(this.state.fileList)
 
     }
@@ -102,6 +92,12 @@ class ProjectTest extends Component {
         })
     }
 
+    dbChange = (value) => {
+        this.setState({
+            db: value
+        })
+    }
+
     render() {
         const uploadButton = (
             <div>
@@ -112,11 +108,12 @@ class ProjectTest extends Component {
         return (
             <div className='project-test'>
                 <div className="top">
-                    <Button ghost type='primary'>清空测试数据</Button>
+                    <Input placeholder="输入需要创建的库名"></Input>
+                    <Button ghost type='primary'>创建</Button>
                 </div>
                 <div className="body">
                     <div className="title">通道测试</div>
-                    <div className="step">
+                    {/* <div className="step">
                         <div className={this.state.wayTestControl ? 'step1' : 'step1 did'}>
                             <span>1</span>
                             <span>上传图片</span>
@@ -127,10 +124,11 @@ class ProjectTest extends Component {
                             <span>通道测试</span>
                             <span></span>
                         </div>
-                    </div>
+                    </div> */}
 
 
                     <div className='before' style={{ display: this.state.wayTestControl ? '' : 'none' }}>
+
                         <div className="upload">
                             <Upload
                                 name="avatar"
@@ -147,23 +145,37 @@ class ProjectTest extends Component {
                                 {this.state.fileList.length > 0 ? '' : uploadButton}
                             </Upload>
                         </div>
+                        <div className="dbs">
+                            <Select
+                                showSearch
+                                style={{ width: 200 }}
+                                placeholder="选择需要上传的库"
+                                optionFilterProp="children"
+                                onChange={this.dbChange}
+                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                            >
+                                <Option value="1">測試庫1</Option>
+                                <Option value="2">測試庫2</Option>
+                                <Option value="3">測試庫3</Option>
+                            </Select>
+                        </div>
                         <div className="btn">
                             <Button onClick={this.upload} type='primary'>上传网关</Button>
                         </div>
                     </div>
 
                     {/* 测试模态框 */}
-                    <TestModal
+                    {/* <TestModal
                         modelType='type2'
                         visible={this.state.visible}
                         title='开门失败'
                         sonLinkTest={this.sonLinkTest}
-                    />
+                    /> */}
 
-                    <div className='after' style={{ display: this.state.wayTestControl ? 'none' : '' }}>
+                    {/* <div className='after' style={{ display: this.state.wayTestControl ? 'none' : '' }}>
                         <Button onClick={this.testWay.bind(this, 1)} type='primary'>X1通道</Button>
                         <Button onClick={this.testWay.bind(this, 2)} type='primary'>X2通道</Button>
-                    </div>
+                    </div> */}
 
                 </div>
             </div>

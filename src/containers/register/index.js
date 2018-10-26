@@ -7,7 +7,7 @@ import { userName } from './../../redux/action'
 
 import './index.scss'
 const FormItem = Form.Item;
-const RadioButton = Radio.Button;
+// const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 
 

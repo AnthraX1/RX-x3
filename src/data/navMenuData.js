@@ -21,7 +21,7 @@ const data = [
         key: 'devicedeploy',
         children: [
             {
-                name: '人脸网管管理',
+                name: '人脸网关管理',
                 key: '/devicedeploy/face'
             },
             {

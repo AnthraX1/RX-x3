@@ -27,7 +27,7 @@ class Nav extends Component {
         }
         window.addEventListener('hashchange', () => {
             hash = window.location.hash.replace(/#|\?.*$/g, '')
-            if (hash !== '/login') {
+            if (hash !== '/login' && hash !== '/register') {
                 // 刷新页面默认展开tab
                 // console.log(defaultOpenKey,hash);
                 defaultOpenKey = hash.match(/\/(\S*)\//)[1]

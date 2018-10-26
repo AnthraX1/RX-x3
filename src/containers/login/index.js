@@ -29,7 +29,6 @@ class Login extends Component {
                 let result = await api.login(option)
                 console.log(result);
                 if(result.data.auth === 'Succ'){
-
                     window.location.href = '#/internet/deploy'
                 }else {
                     message.error('登录失败')

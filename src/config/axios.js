@@ -14,7 +14,7 @@ axios.defaults.baseURL = 'http://192.168.67.31:8080/v1';
 // http request 拦截器
 axios.interceptors.request.use(
     config => {
-        console.log("config",config);
+        // console.log("config",config);
         return config;
     },
     // err => {

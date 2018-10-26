@@ -5,6 +5,10 @@ class Server {
     async login(options) {
         return axios.post('/SAuth/', options)
     }
+    // 注册接口
+    async register(options) {
+        return axios.post('/SRegister/',options)
+    }
     // 入网配置接口
     async network_g() {
         return axios.get('/Network')
@@ -26,9 +30,13 @@ class Server {
     async Camera_p(options) {
         return axios.post('/Camera/', options)
     }
-    // 位置信息接口
+    // 通道信息获取接口
     async Location_g() {
         return axios.get('/Location/')
+    }
+    // 通道信息配置接口
+    async Location_P(options) {
+        return axios.post('/Location/', options)
     }
     // 人脸库信息接口
     async FaceDb_g() {
@@ -37,13 +45,16 @@ class Server {
     async FaceList_g(db, num, page) {
         return axios.get(`/FaceDb/${db}/${(page - 1) * num}/${num}`)
     }
-
+    // 工程测试  上传图片接口
+    async Upload(form, config) {
+        return axios.post('/SUpload/', form, config)
+    }
     // 感知系统接口
     async esthesis_g(options) {
-        return axios.get('/SNode/')
+        return axios.get('/Sense/')
     }
     async esthesis_p(options) {
-        return axios.post('/SNode/', options)
+        return axios.post('/Sense/', options)
     }
 
     // 通行日记和抓怕日记接口

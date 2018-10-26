@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Icon, Input, Button, message } from 'antd'
+import { Form, Icon, Input, Button, message, Radio } from 'antd'
 import api from '../../config/api'
 import { connect } from 'react-redux'
 import { userName } from './../../redux/action'
@@ -7,12 +7,13 @@ import { userName } from './../../redux/action'
 
 import './index.scss'
 const FormItem = Form.Item;
+const RadioButton = Radio.Button;
+const RadioGroup = Radio.Group;
+
 
 class Login extends Component {
 
-    register = () => {
-        window.location.href = '#/register'
-    }
+
 
     handleSubmit = (e) => {
         e.preventDefault();
@@ -23,16 +24,17 @@ class Login extends Component {
                 window.sessionStorage.setItem('userInfo', values.userName)
                 dispatch(userName(values.userName))
                 let option = {
-                    "password":values.password ,
-                    "user": values.userName
+                    "password": values.password,
+                    "user": values.userName,
+                    "group": values.group,
                 }
-                let result = await api.login(option)
-                console.log(result);
-                if(result.data.auth === 'Succ'){
-
-                    window.location.href = '#/internet/deploy'
-                }else {
-                    message.error('登录失败')
+                let result = await api.register(option)
+                console.log("result",result);
+                if (result.status === 200) {
+                    message.success('注册成功,请登录')
+                    window.location.href = '#/login'
+                } else {
+                    message.error('注册失败')
                 }
             }
         });
@@ -60,14 +62,23 @@ class Login extends Component {
                             )}
                         </FormItem>
                         <FormItem>
+                            {getFieldDecorator('group', {
+                                rules: [{ required: true, message: '请选择用户类型!' }],
+                                initialValue: 'user'
+                            })(
+                                <RadioGroup>
+                                    <Radio value="user">普通用户</Radio>
+                                    <Radio value="admin">管理员用户</Radio>
+                                </RadioGroup>
+                            )}
+                        </FormItem>
+                        <FormItem>
                             <Button type="primary" htmlType="submit" className="login-form-button">
-                                登录
+                                注册
                             </Button>
                         </FormItem>
                     </Form>
-                    <div className="register">
-                        <Button onClick={this.register} type="primary" ghost size="small">注册</Button>
-                    </div>
+
                 </div>
             </div>
         );

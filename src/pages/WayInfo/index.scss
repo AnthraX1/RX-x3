@@ -20,12 +20,16 @@
             .index {
                 width: 40px;
             }
-            .position {
+            .name{
                 flex: 1;
                 min-width: 128px;
             }
-            .direction {
-                width: 40px;
+            .position,.code {
+                flex: 1;
+                min-width: 128px;
+            }
+            .direction,.thres {
+                width: 100px;
             }
             .carmera {
                 flex: 1;

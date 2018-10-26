@@ -39,10 +39,10 @@ const data = [
         icon: 'setting',
         key: 'function',
         children: [
-            {
-                name: '位置信息',
-                key: '/function/position'
-            },
+            // {
+            //     name: '位置信息',
+            //     key: '/function/position'
+            // },
             {
                 name: '人脸库信息',
                 key: '/function/faceInfo'
@@ -51,6 +51,10 @@ const data = [
                 name: '通道设置',
                 key: '/function/wayInfo'
             },
+            {
+                name: '查看人脸库',
+                key: '/function/faceList'
+            }
         ]
     },
     {
@@ -65,6 +69,10 @@ const data = [
             {
                 name: '感知系统',
                 key: '/project/esthesis'
+            },
+            {
+                name: '布控系统',
+                key: '/project/arrange'
             }
         ]
     },

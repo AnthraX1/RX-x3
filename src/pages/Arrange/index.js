@@ -33,7 +33,7 @@ class Esthesis extends Component {
     }
     getInit = async () => {
         let result = await api.esthesis_g()
-        console.log(result);
+        console.log(result.data[0]);
         this.list(result.data)
     }
     list = (data = [{ Mac: '', Serv: '' }]) => {

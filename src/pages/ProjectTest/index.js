@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Button, Upload, Icon, message } from 'antd'
 import TestModal from './../../components/TestModal'
 import './index.scss'
-import axios from '../../config/axios'
+import api from '../../config/api'
 
 class ProjectTest extends Component {
 
@@ -26,9 +26,9 @@ class ProjectTest extends Component {
         // console.log(file);
     }
 
-    beforeUpload = (file,fileList) => {
+    beforeUpload = (file, fileList) => {
         // this.state.fileList.push(file)
-        this.setState({fileList})
+        this.setState({ fileList })
 
         const reader = new FileReader();
         reader.addEventListener('load', () => {
@@ -42,7 +42,7 @@ class ProjectTest extends Component {
         //  return false 改为手动上传
         return false
     }
-    asyncUpload = (files) => {
+    asyncUpload = async (files) => {
         let _this = this
         // FormData 对象
         var form = new FormData();
@@ -50,7 +50,7 @@ class ProjectTest extends Component {
             let originEle = ele.originFileObj
             // console.log(ele);
             // 文件对象
-            form.append("file",originEle);
+            form.append("file", originEle);
         });
         // 其他参数
         // form.append("xxx", xxx);
@@ -59,16 +59,23 @@ class ProjectTest extends Component {
                 'Content-Type': 'multipart/form-data'
             }
         }
-        console.log(form);
-        axios.post('http://192.168.100.141:9180/v1/SPic/', form, config).then(data => {
-            console.log('上传', data);
-            if(data.status === 200) {
-                _this.setState({
-                    wayTestControl: false
-                })
-            }
-        }).catch(err => {
-        })
+        // console.log(form);
+        let data = await api.Upload(form, config)
+        console.log('data',data);
+        if (data.status === 200) {
+            _this.setState({
+                wayTestControl: false
+            })
+        }
+        // axios.post('http://192.168.100.141:9180/v1/SPic/', form, config).then(data => {
+        //     console.log('上传', data);
+        //     if (data.status === 200) {
+        //         _this.setState({
+        //             wayTestControl: false
+        //         })
+        //     }
+        // }).catch(err => {
+        // })
     }
     upload = () => {
         if (!this.state.imageUrl) {
@@ -137,7 +144,7 @@ class ProjectTest extends Component {
                                 onRemove={this.handleRemove}
                             >
                                 {/* {this.state.imageUrl ? <img src={this.state.imageUrl} alt="avatar" /> : uploadButton} */}
-                                {this.state.imageUrl ? '' : uploadButton}
+                                {this.state.fileList.length > 0 ? '' : uploadButton}
                             </Upload>
                         </div>
                         <div className="btn">

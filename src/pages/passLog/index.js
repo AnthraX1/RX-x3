@@ -49,6 +49,9 @@ class passLog extends Component {
         // console.log('search');
         this.list(this.state.pageSize, 1, this.state.ch, this.state.beg, this.state.end)
     }
+    download = () => {
+        console.log('下载');
+    }
     pageChange = (page) => {
         this.list(this.state.pageSize, page, this.state.ch, this.state.beg, this.state.end)
         this.setState({
@@ -125,7 +128,7 @@ class passLog extends Component {
     }
     render() {
         return (
-            <div className='system-log'>
+            <div className='pass-log'>
                 <div className="search">
                     <div>
                         <div className="key">日期：</div>
@@ -153,6 +156,9 @@ class passLog extends Component {
                     </div>
                     <div className="btn">
                         <Button onClick={this.search}><Icon type='search'></Icon>搜索</Button>
+                    </div>
+                    <div className="download">
+                        <Button type="primary" onClick={this.download}><Icon type='download'></Icon>下载</Button>
                     </div>
                 </div>
                 <div className="title layout">

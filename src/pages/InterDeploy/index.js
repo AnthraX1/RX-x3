@@ -16,6 +16,7 @@ class InterDeploy extends Component {
     }
     initForm =async () => {
         let {data} = await api.network_g()
+        console.log('interdeplot', data);
         let result = data[0]
         this.setState({
             "netif": result.netif

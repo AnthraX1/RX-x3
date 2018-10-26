@@ -1,6 +1,6 @@
 import { type } from './../action'
 const initState = {
-    name: 'username',
+    name: '请先登录!',
     type: 'admin'
 }
 

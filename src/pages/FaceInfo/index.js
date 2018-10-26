@@ -61,7 +61,7 @@ class FaceInfo extends Component {
             return (
                 <div className="line layout" key={index}>
                     <div className="index">{index+1}</div>
-                    <div className="name">万科小区1期通行库</div>
+                    {/* <div className="name">万科小区1期通行库</div> */}
                     {/* <div className="type">白名单</div> */}
                     <div className="source">{item.db}</div>
                     <div className="position">
@@ -98,7 +98,7 @@ class FaceInfo extends Component {
                 <div className="table">
                     <div className="title layout">
                         <div className="index">序号</div>
-                        <div className="name">通行库名称</div>
+                        {/* <div className="name">通行库名称</div> */}
                         {/* <div className="type">库类型</div> */}
                         <div className="source">库来源</div>
                         <div className="position">位置信息</div>

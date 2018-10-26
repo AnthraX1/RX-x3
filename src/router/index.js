@@ -3,6 +3,7 @@ import { HashRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
 import App from './../App'
 import Main from './../containers/main'
 import Login from './../containers/login'
+import Register from './../containers/register'
 
 import DeviceActivation from './../pages/DeviceActivation'
 import InterDeploy from './../pages/InterDeploy'
@@ -12,8 +13,14 @@ import CameraManage from './../pages/CameraManage'
 import PositionInfo from './../pages/PositionInfo'
 import FaceInfo from './../pages/FaceInfo'
 import WayInfo from './../pages/WayInfo'
+import FaceList from './../pages/FaceList'
+
+
+
 import ProjectTest from './../pages/ProjectTest'
 import Esthesis from './../pages/Esthesis'
+import Arrange from './../pages/Arrange'
+
 // import System from './../pages/System'
 import CaptureLog from './../pages/captureLog'
 import PassLog from './../pages/passLog'
@@ -27,6 +34,7 @@ class IRouter extends React.Component {
                 <App>
                     <Switch>
                         <Route path='/login' component={Login} />
+                        <Route path='/register' component={Register} />
                         <Route path='/' render={() => 
                             <Main>
                                 <Switch>
@@ -40,9 +48,11 @@ class IRouter extends React.Component {
                                     <Route path='/function/position' component={PositionInfo} />
                                     <Route path='/function/faceInfo' component={FaceInfo} />
                                     <Route path='/function/wayInfo' component={WayInfo} />
+                                    <Route path='/function/faceList' component={FaceList} />
 
                                     <Route path='/project/projectTest' component={ProjectTest} />
                                     <Route path='/project/esthesis' component={Esthesis} />
+                                    <Route path='/project/arrange' component={Arrange} />
 
                                     <Route path='/system/captureLog' component={CaptureLog} />
                                     <Route path='/system/passLog' component={PassLog} />

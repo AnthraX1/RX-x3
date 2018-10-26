@@ -58,6 +58,21 @@ class captureLog extends Component {
         this.list(this.state.pageSize, 1, this.state.ch, this.state.beg, this.state.end)
     }
 
+    download = () => {
+        console.log('下载');
+        //表单方式直接下载文件
+        //url表示要下载的文件路径,如:htpp://127.0.0.1/test.rar
+        // function downloadFile(url) {
+        //     var form = $("<form>");//定义form表单,通过表单发送请求
+        //     form.attr("style", "display:none");//设置为不显示
+        //     form.attr("target", "");
+        //     form.attr("method", "get");//设置请求类型  
+        //     form.attr("action", url);//设置请求路径
+        //     $("body").append(form);//添加表单到页面(body)中
+        //     form.submit();//表单提交
+        // }
+    }
+
 
 
     list = async (num = 10, page = 1, ch = "", beg = 0, end = 0) => {
@@ -118,6 +133,9 @@ class captureLog extends Component {
                     </div>
                     <div className="btn">
                         <Button onClick={this.search}><Icon type='search'></Icon>搜索</Button>
+                    </div>
+                    <div className="download">
+                        <Button type='primary' onClick={this.download}><Icon type='download'></Icon>下载</Button>
                     </div>
                 </div>
                 <div className="title layout">

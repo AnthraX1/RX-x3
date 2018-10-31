@@ -5,13 +5,15 @@ export default {
         let date = new Date(data).getDate()
         let hours = new Date(data).getHours()
         let minutes = new Date(data).getMinutes()
+        let seconds = new Date(data).getSeconds()
 
-        year = year > 10 ? year : `0${year}`
-        month = month > 10 ? month : `0${month}`
-        date = date > 10 ? date : `0${date}`
-        hours = hours > 10 ? hours : `0${hours}`
-        minutes = minutes > 10 ? minutes : `0${minutes}`
+        year = year >= 10 ? year : `0${year}`
+        month = month >= 10 ? month : `0${month}`
+        date = date >= 10 ? date : `0${date}`
+        hours = hours >= 10 ? hours : `0${hours}`
+        minutes = minutes >= 10 ? minutes : `0${minutes}`
+        seconds = seconds >= 10 ? seconds : `0${seconds}`
 
-        return `${year}-${month}-${date} ${hours}:${minutes}`
+        return `${year}-${month}-${date} ${hours}:${minutes}:${seconds}`
     }
 }

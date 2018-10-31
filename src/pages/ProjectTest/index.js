@@ -16,7 +16,37 @@ class ProjectTest extends Component {
         fileListLenght: 0,
         db: ''
     };
-    
+    componentDidMount() {
+        this.getDbList()
+    }
+
+    getDbList = async () => {
+        let result = await api.PicDb_g()
+        let listDOM = result.data.map((item, index) => {
+            return (
+                <Option key={index} value={item.name}>{item.name}</Option>
+            )
+        })
+
+        this.setState({
+            listDOM
+        })
+    }
+
+    createDb = async () => {
+        // console.log('创建',this.refs.dbName.input.value);
+        let dbname = this.refs.dbName.input.value
+        let options = {
+            "Name": dbname
+        }
+        let result = await api.picDb_p(options)
+        // console.log('post-dbname', result);
+        if (result.status === 200) {
+            this.getDbList()
+            this.refs.dbName.input.value = ""
+            message.success('创建成功')
+        }
+    }
 
     handleChange = (info) => {
         // console.log(info);
@@ -41,7 +71,7 @@ class ProjectTest extends Component {
         //  return false 改为手动上传
         return false
     }
-    asyncUpload = async (files) => {
+    asyncUpload = async (files, name) => {
         // FormData 对象
         var form = new FormData();
         files.forEach((ele, index) => {
@@ -55,7 +85,7 @@ class ProjectTest extends Component {
                 'Content-Type': 'multipart/form-data'
             }
         }
-        let data = await api.Upload(form, config)
+        let data = await api.Upload(form, name, config)
         if (data.status === 200) {
             message.success('上传成功')
         }
@@ -72,12 +102,12 @@ class ProjectTest extends Component {
         } else if (this.state.dbSelect === "") {
             message.warning('请选择上传的库')
             return
-        } else if(username !== 'admin'){
+        } else if (username !== 'admin') {
             message.warning('你没有权限上传图片')
             return
         }
 
-        this.asyncUpload(this.state.fileList)
+        this.asyncUpload(this.state.fileList, this.state.db)
 
     }
     testWay = (way) => {
@@ -108,8 +138,8 @@ class ProjectTest extends Component {
         return (
             <div className='project-test'>
                 <div className="top">
-                    <Input placeholder="输入需要创建的库名"></Input>
-                    <Button ghost type='primary'>创建</Button>
+                    <Input ref="dbName" placeholder="输入需要创建的库名"></Input>
+                    <Button onClick={this.createDb} ghost type='primary'>创建</Button>
                 </div>
                 <div className="body">
                     <div className="title">通道测试</div>
@@ -154,9 +184,7 @@ class ProjectTest extends Component {
                                 onChange={this.dbChange}
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             >
-                                <Option value="1">測試庫1</Option>
-                                <Option value="2">測試庫2</Option>
-                                <Option value="3">測試庫3</Option>
+                                {this.state.listDOM}
                             </Select>
                         </div>
                         <div className="btn">

@@ -85,7 +85,7 @@ class CameraModal extends Component {
             wrapperCol: { span: 12 },
         };
         return (
-            < Modal
+            <Modal
                 className='carmera-modal'
                 title={this.props.title}
                 visible={this.state.visible}

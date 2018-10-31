@@ -111,7 +111,12 @@ class passLog extends Component {
             return
         }
         let formatDate = tool.formatDate
-        let listDom = data.logs.map((item, index) => {
+        let sortData = data.logs.sort((obj1, obj2) => {
+            let time1 = obj1.ts
+            let time2 = obj2.ts
+            return time2 - time1
+        })
+        let listDom = sortData.map((item, index) => {
             return (
                 <div className='layout list' key={index}>
                     <div className="operate-data">{formatDate(item.ts * 1000)}</div>
@@ -166,12 +171,6 @@ class passLog extends Component {
                             />
                         </div>
                     </div>
-                    {/* <div>
-                        <div className="key">人脸库: </div>
-                        <div className="value">
-                            <Input></Input>
-                        </div>
-                    </div> */}
                     <div>
                         <div className="key">通道信息:</div>
                         <div className="value">

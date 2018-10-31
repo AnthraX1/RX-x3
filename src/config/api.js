@@ -46,8 +46,20 @@ class Server {
         return axios.get(`/FaceDb/${db}/${(page - 1) * num}/${num}`)
     }
     // 工程测试  上传图片接口
-    async Upload(form, config) {
-        return axios.post('/SUpload/', form, config)
+    async Upload(form, name, config) {
+        return axios.post(`/SUpload/${name}`, form, config)
+    }
+    // 以图搜图上传接口
+    async Vupload(form, name, config) {
+        return axios.post(`/VUpload/${name}`, form, config)
+    }
+    // 获取库列表
+    async PicDb_g() {
+        return axios.get("/PicDb/")
+    }
+    // 创建库
+    async picDb_p(options) {
+        return axios.post('/PicDb/', options)
     }
     // 感知系统接口
     async esthesis_g(options) {
@@ -88,6 +100,14 @@ class Server {
     // 下载日记接口
     async download(options) {
         return axios.post('/FaceLog/Download', options)
+    }
+    // 操作日记获取接口
+    async operate_g(options) {
+        return axios.post("/OpLog/Query", options)
+    }
+    // 操作日记下载接口
+    async operate_download(options) {
+        return axios.post("/OpLog/Download", options)
     }
 }
 

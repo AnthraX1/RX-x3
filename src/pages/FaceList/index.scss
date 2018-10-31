@@ -9,11 +9,8 @@
         margin-top: 30px;
         .select {
             display: flex;
-            width: 260px;
+            width: 400px;
             margin-right: 20px;
-            .ant-select-selection__rendered {
-                width: 80px;
-            }
         }
         .btn {
             margin-left: 20px;
@@ -47,6 +44,9 @@
                 flex: 1;
             }
             .img {
+                width: 300px;
+            }
+            .DB-img{
                 flex: 1;
             }
         }
@@ -58,8 +58,8 @@
             font-weight: 700;
         }
         .body {
-            height: 70px;
-            line-height: 70px;
+            height: 120px;
+            line-height: 120px;
             font-size: 12px;
             color: #666666;
             &:hover {
@@ -68,10 +68,42 @@
             .img {
                 display: flex;
                 justify-content: center;
+                align-items: center;
                 img {
                     width: 50px;
                     height: 60px;
                     margin: 2px 30px;
+                }
+            }
+            .DB-img {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                .save-img {
+                    color: #666666; // font-size: 0;
+                    display: flex;
+                    flex-direction: column;
+                    margin: 0 10px;
+                    img {
+                        width: 50px;
+                        height: 60px;
+                        vertical-align: middle;
+                        margin: 0 10px;
+                    }
+                    .proportion {
+                        font-size: 12px;
+                        height: 18px;
+                        line-height: 18px;
+                        
+                    }
+                    .examine{
+                        cursor: pointer;
+                        color: #0594FE;
+                        user-select: none;
+                        &:active{
+                           color: rgb(3, 103, 179);
+                        }
+                    }
                 }
             }
         }

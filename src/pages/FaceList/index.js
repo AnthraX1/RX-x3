@@ -1,24 +1,40 @@
 import React, { Component } from 'react'
-import { Input, Button, Upload, Pagination, Modal, Spin } from 'antd'
+import { Select, Input, Button, Upload, Modal, Spin, message, Popover } from 'antd'
+import Zmage from 'react-zmage'
+import api from '../../config/api'
 import './index.scss'
 
 
+
 const InputGroup = Input.Group;
-// const Option = Select.Option;
+const Option = Select.Option;
 // const Search = Input.Search;
 
 class FaceList extends Component {
 
     state = {
         dataSource: [],
-        control: true,
-        select: 'position',
+        select: '',
         visible: false,
-        loading: false
+        loading: false,
+        imgList: []
     }
+    componentDidMount() {
+        this.getDbList()
+    }
+    getDbList = async () => {
+        let result = await api.PicDb_g()
+        console.log('resu', result);
+        let DBlistDOM = result.data.map((item, index) => {
+            return (
+                <Option key={index} value={item.name}>{item.name}</Option>
+            )
+        })
 
-    imgList = ['https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1534758785818&di=3e4d36648b7cc3743af3d70bddf8d347&imgtype=0&src=http%3A%2F%2Fimg3.duitang.com%2Fuploads%2Fitem%2F201607%2F09%2F20160709073958_5vBTZ.thumb.700_0.jpeg', 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1534758785818&di=3e4d36648b7cc3743af3d70bddf8d347&imgtype=0&src=http%3A%2F%2Fimg3.duitang.com%2Fuploads%2Fitem%2F201607%2F09%2F20160709073958_5vBTZ.thumb.700_0.jpeg', 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1534758785818&di=3e4d36648b7cc3743af3d70bddf8d347&imgtype=0&src=http%3A%2F%2Fimg3.duitang.com%2Fuploads%2Fitem%2F201607%2F09%2F20160709073958_5vBTZ.thumb.700_0.jpeg', 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1534758785818&di=3e4d36648b7cc3743af3d70bddf8d347&imgtype=0&src=http%3A%2F%2Fimg3.duitang.com%2Fuploads%2Fitem%2F201607%2F09%2F20160709073958_5vBTZ.thumb.700_0.jpeg']
-
+        this.setState({
+            DBlistDOM
+        })
+    }
     showModal = () => {
         this.setState({
             visible: true,
@@ -67,22 +83,56 @@ class FaceList extends Component {
 
     }
     beforeUpload = (file, fileList) => {
-        console.log('beforeUpload', fileList);
+        console.log('beforeUpload', file);
+        if (this.state.select === '') {
+            message.warning('请先选择上传的库')
+            return
+        }
         this.setState({
             loading: true
         })
+        // this.upload(file, this.state.select)
+        this.upload(file, this.state.select)
+        // 改为手动上传
+        return false
+    }
+    upload = async (file, name) => {
+        // FormData 对象
+        var form = new FormData();
+        form.append("file", file);
+        // 其他参数
+        let config = {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }
+        let result = await api.Vupload(form, name, config)
+        console.log("以图搜图", result.data.logs);
+        this.list(result.data.logs)
+        if (result.status === 200) {
+            this.setState({
+                loading: false
+            })
+        } else {
+            setTimeout(() => {
+                this.setState({
+                    loading: false
+                })
+                message.warning("没有找到相应的数据...")
+            }, 5000);
+        }
     }
     change = () => {
         this.setState({
             control: !this.state.control
         })
     }
-    // selectChange = (e) => {
-    //     // console.log(e);
-    //     this.setState({
-    //         select: e
-    //     })
-    // }
+    selectChange = (e) => {
+        // console.log(e);
+        this.setState({
+            select: e
+        })
+    }
     inputChange = (e) => {
         // console.log(e.target.value);
         this.setState({
@@ -92,23 +142,74 @@ class FaceList extends Component {
     search = () => {
         console.log(this.state);
     }
-    list = () => {
-        let arr = [1, 2, 3, 4, 5, 6]
-        return arr.map((item, index) => {
+    infoModel = (info = { db: '****', face: '*****' }) => {
+        let spanStyle = {
+            width: '80px',
+            display: 'inline-block',
+            textAlignLast: 'justify',
+            marginRight: '10px'
+        }
+        let wordStyle = {
+            fontWeight: '700'
+        }
+        return (
+            <div>
+                <div><span style={spanStyle}>来源:</span><span style={wordStyle}>{info.db === "" ? "暂时不提供" : info.db}</span></div>
+                <div><span style={spanStyle}>相识度 :</span><span style={wordStyle}>{info.sim * 100}%</span></div>
+            </div>
+        )
+    }
+    formatTime = (time = 0) => {
+        // 1540615857
+        let obj = new Date(time)
+        let year = obj.getFullYear()
+        let month = obj.getMonth() + 1
+        let date = obj.getDate()
+
+        let hour = obj.getHours()
+        let minute = obj.getMinutes()
+        let second = obj.getSeconds()
+
+        month = month < 10 ? `0${month}` : month
+        date = date < 10 ? `0${date}` : date
+        hour = hour < 10 ? `0${hour}` : hour
+        minute = minute < 10 ? `0${minute}` : minute
+        second = second < 10 ? `0${second}` : second
+
+        // console.log(`${year}-${month}-${date} ${hour}:${minute}:${second}`);
+        return `${year}-${month}-${date} ${hour}:${minute}:${second}`
+    }
+    list = (items = []) => {
+        let listDOM = items.map((item, index) => {
             return (
-                <div onClick={this.showModal} className='body layout' key={index}>
-                    <div className="index">{this.state.control ? (index + 1) : ''}</div>
-                    <div className="id">9573</div>
-                    <div className="time">2018-8-20</div>
-                    <div className="ID-card">12356809876543213</div>
+                <div className='body layout' key={index}>
+                    <div className="index">{index + 1}</div>
+                    <div className="time">{this.formatTime(item.ts * 1000)}</div>
                     <div className="img">
-                        <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1534758785818&di=3e4d36648b7cc3743af3d70bddf8d347&imgtype=0&src=http%3A%2F%2Fimg3.duitang.com%2Fuploads%2Fitem%2F201607%2F09%2F20160709073958_5vBTZ.thumb.700_0.jpeg" alt="" />
-                        <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1534758785818&di=3e4d36648b7cc3743af3d70bddf8d347&imgtype=0&src=http%3A%2F%2Fimg3.duitang.com%2Fuploads%2Fitem%2F201607%2F09%2F20160709073958_5vBTZ.thumb.700_0.jpeg" alt="" />
-                        <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1534758785818&di=3e4d36648b7cc3743af3d70bddf8d347&imgtype=0&src=http%3A%2F%2Fimg3.duitang.com%2Fuploads%2Fitem%2F201607%2F09%2F20160709073958_5vBTZ.thumb.700_0.jpeg" alt="" />
+                        <img src={item.image} alt="" />
+                    </div>
+                    <div className="DB-img">
+                        {
+                            item.comps?
+                            item.comps.map((item, index) => {
+                                return (
+                                    <div className='save-img' key={index + '_'}>
+                                        <Zmage src={item.pic} alt="" />
+                                        <span className='proportion'>相识度{item.sim * 100}%</span>
+                                        <Popover placement="left" content={this.infoModel(item)} title="人物信息" trigger="click">
+                                            <span className='proportion examine'>点击查看</span>
+                                        </Popover>
+                                    </div>
+                                )
+                            }): ""
+                        }
+
+
                     </div>
                 </div>
             )
         })
+        this.setState({ listDOM })
     }
     render() {
         const props = {
@@ -126,11 +227,10 @@ class FaceList extends Component {
                 <div className="search">
                     <div className="select">
                         <InputGroup compact>
-                            {/* <Select onChange={this.selectChange} defaultValue={this.state.select}>
-                                <Option value="position">位置信息</Option>
-                                <Option value="id">人员ID</Option>
-                            </Select> */}
-                            <Input addonBefore="选择库" onChange={this.inputChange} style={{ width: '100%' }}></Input>
+                            <Button>选择库</Button>
+                            <Select style={{ width: '50%' }} onChange={this.selectChange}>
+                                {this.state.DBlistDOM}
+                            </Select>
                         </InputGroup>
                     </div>
 
@@ -150,20 +250,19 @@ class FaceList extends Component {
                     </div>
                 </div>
                 <div className="list">
-                    <div className="title layout">
-                        <div className="index">{this.state.control ? '序号' : ''}</div>
-                        <div className="id">人员ID</div>
-                        <div className="time">录入时间</div>
-                        <div className="ID-card">身份证</div>
-                        <div className="img">人脸照片</div>
-                    </div>
-                    {this.imgListModal(this.imgList)}
-                    <Spin spinning={this.state.loading}  tip="Loading..." size="large">
-                        {this.list()}
+                    <Spin spinning={this.state.loading} tip="Loading..." size="large">
+                        <div className="title layout">
+                            <div className="index">序号</div>
+                            <div className="time">比对时间</div>
+                            <div className="img">上传图片</div>
+                            <div className="DB-img">底库图片</div>
+                        </div>
+                        {/* {this.imgListModal(this.state.imgList)} */}
+                        {this.state.listDOM}
                     </Spin>
                 </div>
                 <div className="page">
-                    <Pagination defaultCurrent={1} total={50} />
+                    {/* <Pagination defaultCurrent={1} total={50} /> */}
                 </div>
             </div>
         );

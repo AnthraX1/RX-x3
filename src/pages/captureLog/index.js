@@ -69,7 +69,7 @@ class captureLog extends Component {
             "limit": 10000000000000,
             "offset": 0
         }
-        let {data} = await api.download(options)
+        let { data } = await api.download(options)
         let downloadUrl = data.Url
         this.downloadFile(downloadUrl)
 
@@ -95,7 +95,12 @@ class captureLog extends Component {
         }
         // let arr = [1, 2, 3, 4, 5]
         let formatDate = tool.formatDate
-        let listDom = data.logs.map((item, index) => {
+        let sortData = data.logs.sort((obj1, obj2) => {
+            let time1 = obj1.ts
+            let time2 = obj2.ts
+            return time2 - time1
+        })
+        let listDom = sortData.map((item, index) => {
             return (
                 <div className='layout list' key={index}>
                     <div className="operate-data">{formatDate(item.ts * 1000)}</div>
@@ -155,7 +160,7 @@ class captureLog extends Component {
                     <div className="way-info">通道信息</div>
                     {/* <div className="record">行为记录</div> */}
                     {/* <div className="direction">方向</div> */}
-                    <div className="contrast">照片(抓拍照片vs比对库照片)</div>
+                    <div className="contrast">抓拍照片</div>
                 </div>
                 <div className="body">
                     {this.state.listDom}

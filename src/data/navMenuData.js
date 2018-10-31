@@ -52,7 +52,7 @@ const data = [
                 key: '/function/wayInfo'
             },
             {
-                name: '查看人脸库',
+                name: '以图搜图',
                 key: '/function/faceList'
             }
         ]
@@ -92,6 +92,10 @@ const data = [
             {
                 name: '通行日记',
                 key: '/system/passLog'
+            },
+            {
+                name: '操作日记',
+                key: '/system/operateLog'
             },
             {
                 name: '监控',

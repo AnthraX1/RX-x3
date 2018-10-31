@@ -50,12 +50,12 @@ class Esthesis extends Component {
         // console.log(result.data[0]);
         this.list(result.data)
     }
-    list = (data = [{ Mac: '', Serv: '' }]) => {
+    list = (data = [{ Name: '', Serv: '' }]) => {
         let listDOM = data.map((item, index) => {
             return (
                 <div className="line layout" key={index}>
                     <div className="index">{index + 1}</div>
-                    <div className="name">{item.Mac}</div>
+                    <div className="name">{item.Name}</div>
                     <div className="type">{item.Serv}</div>
                     <div className="operate">
                         <span onClick={this.AddModelControl.bind(this, item)} className='blue'>配置</span>
@@ -78,7 +78,7 @@ class Esthesis extends Component {
                 <div className="table">
                     <div className="title layout">
                         <div className="index">序号</div>
-                        <div className="name">MAC地址</div>
+                        <div className="name">名称</div>
                         <div className="type">server</div>
                         <div className="operate">操作</div>
                     </div>

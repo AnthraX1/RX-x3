@@ -2,13 +2,16 @@
  * http配置
  */
 import axios from 'axios'
+import ip from "./ipconfig.js"
 
 // axios 配置
 axios.defaults.timeout = 50000;
-axios.defaults.withCredentials=true
+axios.defaults.withCredentials = true
 // axios.defaults.baseURL = 'http://120.55.46.197:8080/v1';
 // axios.defaults.baseURL = 'http://192.168.200.110:8080/v1';
-axios.defaults.baseURL = 'http://192.168.67.31:8080/v1';
+// axios.defaults.baseURL = 'http://127.0.0.1:8080/v1';
+axios.defaults.baseURL = `http://${ip.ip}:8080/v1`;
+// axios.defaults.baseURL = 'http://192.168.67.12:8080/v1';
 // axios.defaults.baseURL = 'http://192.168.67.31:9888/v1';
 
 // http request 拦截器
@@ -24,11 +27,11 @@ axios.interceptors.request.use(
 
 // http response 拦截器
 axios.interceptors.response.use(
-    
+
     response => {
         // console.log("response", response.data);
-        if('auth' in  response.data) {
-            if(response.data['auth'] === 'Fail') {
+        if ('auth' in response.data) {
+            if (response.data['auth'] === 'Fail') {
                 window.location.href = '#/login'
             }
         }

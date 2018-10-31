@@ -24,6 +24,7 @@ import Arrange from './../pages/Arrange'
 // import System from './../pages/System'
 import CaptureLog from './../pages/captureLog'
 import PassLog from './../pages/passLog'
+import OperateLog from './../pages/OperateLog'
 import Storage from './../pages/Storage'
 import Monitor from './../pages/Monitor'
 
@@ -56,6 +57,7 @@ class IRouter extends React.Component {
 
                                     <Route path='/system/captureLog' component={CaptureLog} />
                                     <Route path='/system/passLog' component={PassLog} />
+                                    <Route path='/system/operateLog' component={OperateLog} />
                                     <Route path='/system/storage' component={Storage} />
                                     <Route path='/system/monitor' component={Monitor} />
                                     <Redirect to="/login" />

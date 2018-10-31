@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Icon } from 'antd'
 import mqtt from 'mqtt'
+import ip from "./../../config/ipconfig.js"
 import './index.scss'
 class Monitor extends Component {
     state = {
@@ -23,10 +24,10 @@ class Monitor extends Component {
         // let url = "//player.alicdn.com/video/aliyunmedia.mp4"
 
         let url = {
-            url1: 'http://192.168.67.31:9880/live?port=1985&app=x3&stream=stream1',
-            url2: 'http://192.168.67.31:9880/live?port=1985&app=x3&stream=stream1',
-            url3: 'http://192.168.67.31:9880/live?port=1985&app=x3&stream=stream1',
-            url4: 'http://192.168.67.31:9880/live?port=1985&app=x3&stream=stream1'
+            url1: `http://${ip.ip}:9880/live?port=1985&app=x3&stream=stream1`,
+            url2: `http://${ip.ip}:9880/live?port=1985&app=x3&stream=stream2`,
+            url3: `http://${ip.ip}:9880/live?port=1985&app=x3&stream=stream3`,
+            url4: `http://${ip.ip}:9880/live?port=1985&app=x3&stream=stream4`,
         }
 
         this.newAliplayer(Aliplayer, "player-con1", url.url1, width, height)
@@ -35,13 +36,13 @@ class Monitor extends Component {
         this.newAliplayer(Aliplayer, "player-con4", url.url4, width, height)
 
         this.mqtt('/ATT/CH01/', "box1")
-        this.mqtt('/ATT/CH01/', "box2")
-        this.mqtt('/ATT/CH01/', "box3")
-        this.mqtt('/ATT/CH01/', "box4")
+        this.mqtt('/ATT/CH02/', "box2")
+        this.mqtt('/ATT/CH03/', "box3")
+        this.mqtt('/ATT/CH04/', "box4")
     }
     mqtt = (subscribe, type) => {
         let _this = this
-        var client = mqtt.connect('ws://192.168.67.31:9001')
+        var client = mqtt.connect(`ws://${ip.ip}:9001`)
         let arr = []
 
         client.on('connect', function () {

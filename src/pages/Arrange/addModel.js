@@ -21,19 +21,14 @@ class addModel extends Component {
         console.log(item);
         this.setState({ item })
         if ("Serv" in item) {
-            let mac = item.Mac
+            let name = item.Name
             let server = item.Serv
             if (!server.match(/(\S*):/)) {
                 message.error('数据不匹配')
                 return
             }
             this.props.form.setFieldsValue({
-                mac1: mac.slice(0, 2),
-                mac2: mac.slice(2, 4),
-                mac3: mac.slice(4, 6),
-                mac4: mac.slice(6, 8),
-                mac5: mac.slice(8, 10),
-                mac6: mac.slice(10, 12),
+                name: name,
                 server: server.match(/(\S*):/)[1]
             })
         } else {
@@ -55,20 +50,21 @@ class addModel extends Component {
             if (!err) {
                 if (this.state.type === "add") {
                     let option = {
-                        "Mac": values.mac1 + values.mac2 + values.mac3 + values.mac4 + values.mac5 + values.mac6,
-                        "Serv": values.server
+                        "Serv": values.server,
+                        "Name": values.name,
+                        "Sn": 0
                     }
-                    let {data}= await api.arrange_p(option)
-                    if(data.Node === 0) {
+                    let { data } = await api.arrange_p(option)
+                    if (data.Sn === 0) {
                         message.error('不合法')
                     }
                 } else if (this.state.type === "edit") {
                     let option = {
-                        "Mac": values.mac1 + values.mac2 + values.mac3 + values.mac4 + values.mac5 + values.mac6,
                         "Serv": values.server,
-                        "Node": this.state.item.Node
+                        "Sn": this.state.item.Sn,
+                        "Name": values.name,
                     }
-                    await api.arrange_put(this.state.item.Node, option)
+                    await api.arrange_put(this.state.item.Sn, option)
                 }
                 // console.log("result", result);
 
@@ -83,10 +79,10 @@ class addModel extends Component {
             labelCol: { span: 2 },
             wrapperCol: { span: 24 },
         };
-        const macItemLayout = {
-            labelCol: { span: 0 },
-            wrapperCol: { span: 24 },
-        }
+        // const macItemLayout = {
+        //     labelCol: { span: 0 },
+        //     wrapperCol: { span: 24 },
+        // }
         return (
             <Modal
                 className='add-modal'
@@ -101,68 +97,18 @@ class addModel extends Component {
             >
                 <Form onSubmit={this.submit}>
                     <div className='box'>
-                        <div className="key">mac</div>
+
+                        <div className="key">名称</div>
                         <div className="value">
                             <FormItem
-                                {...macItemLayout}
+                                {...formItemLayout}
                             >
-                                {getFieldDecorator('mac1', {
-                                    rules: [{ required: true, message: 'mac不能空' }],
+                                {getFieldDecorator('name', {
+                                    rules: [{ required: true, message: '名称不能为空' }],
                                 })(
                                     <Input autoComplete='off' />
                                 )}
                             </FormItem>
-                            <FormItem
-                                label=""
-                                {...macItemLayout}
-                            >
-                                {getFieldDecorator('mac2', {
-                                    rules: [{ required: true, message: 'mac不能空' }],
-                                })(
-                                    <Input autoComplete='off' />
-                                )}
-                            </FormItem>
-                            <FormItem
-                                label=""
-                                {...macItemLayout}
-                            >
-                                {getFieldDecorator('mac3', {
-                                    rules: [{ required: true, message: 'mac不能空' }],
-                                })(
-                                    <Input autoComplete='off' />
-                                )}
-                            </FormItem>
-                            <FormItem
-                                label=""
-                                {...macItemLayout}
-                            >
-                                {getFieldDecorator('mac4', {
-                                    rules: [{ required: true, message: 'mac不能空' }],
-                                })(
-                                    <Input autoComplete='off' />
-                                )}
-                            </FormItem>
-                            <FormItem
-                                label=""
-                                {...macItemLayout}
-                            >
-                                {getFieldDecorator('mac5', {
-                                    rules: [{ required: true, message: 'mac不能空' }],
-                                })(
-                                    <Input autoComplete='off' />
-                                )}
-                            </FormItem>
-                            <FormItem
-                                label=""
-                                {...macItemLayout}
-                            >
-                                {getFieldDecorator('mac6', {
-                                    rules: [{ required: true, message: 'mac不能空' }],
-                                })(
-                                    <Input autoComplete='off' />
-                                )}
-                            </FormItem>
-
                         </div>
 
                     </div>

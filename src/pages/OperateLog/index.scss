@@ -1,0 +1,98 @@
+.operate-log {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding-left: 20px;
+    .search {
+        margin-top: 10px;
+        display: flex;
+        >div {
+            display: flex;
+            height: 28px;
+            line-height: 28px;
+            color: #666666;
+            .key {
+                font-size: 12px;
+                margin: 0 10px;
+            }
+        }
+        .btn {
+            width: 200px;
+            margin-left: 30px;
+        }
+        .download {
+            width: 200px;
+        }
+    }
+    .layout {
+        display: flex;
+        text-align: center;
+        .operate-data {
+            flex: 1;
+        }
+        .user {
+            flex: 1;
+        }
+        .operate {
+            flex: 1;
+        }
+        .time {
+            flex: 1.5;
+        }
+        .status {
+            flex: 1;
+        }
+    }
+    .title {
+        margin-top: 20px;
+        height: 40px;
+        line-height: 40px;
+        font-size: 12px;
+        font-weight: 700;
+        border-bottom: 1px solid #e8e8e8;
+        background-color: #fafafa;
+    }
+    .body {
+        flex: 1;
+        .list {
+            font-size: 14px;
+            color: #666666;
+            height: 100px;
+            line-height: 100px;
+            &:hover {
+                background-color: #e6f7ff;
+            }
+            .status {
+                position: relative;
+                &::before {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50% -50%);
+                    display: inline-block;
+                    content: "";
+                    width: 10px;
+                    height: 10px;
+                    border-radius: 50%;
+                }
+                &.fail {
+                    &::before {
+                        background-color: red;
+                        box-shadow: 0 0 10px red;
+                    }
+                }
+                &.succ {
+                    &::before {
+                        background-color: green;
+                        box-shadow: 0 0 10px green;
+                    }
+                }
+            }
+        }
+    }
+    .page {
+        text-align: center;
+        height: 34px;
+        margin-bottom: 20px;
+    }
+}

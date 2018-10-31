@@ -22,8 +22,8 @@ class OperateLog extends Component {
         let option = {
             "beg": this.state.beg,
             "end": this.state.end,
-            "limit": 0,
-            "offset": 9999999999,
+            "limit":  999999,
+            "offset":0,
             "user": this.state.user
         }
         let {data} = await api.operate_download(option)

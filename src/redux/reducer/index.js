@@ -1,7 +1,8 @@
 import { type } from './../action'
 const initState = {
     name: '请先登录!',
-    type: 'admin'
+    type: 'admin',
+    ip: "127.0.0.1"
 }
 
 
@@ -16,6 +17,11 @@ export default (state = initState, action) => {
             return {
                 ...state,
                 type: action.type
+            }
+        case type.BASE_IP:
+            return {
+                ...state,
+                ip: action.ip
             }
         default:
             return {

@@ -14,6 +14,7 @@ axios.defaults.baseURL = `http://${ip.ip}:8080/v1`;
 // axios.defaults.baseURL = 'http://192.168.67.12:8080/v1';
 // axios.defaults.baseURL = 'http://192.168.67.31:9888/v1';
 
+
 // http request 拦截器
 axios.interceptors.request.use(
     config => {

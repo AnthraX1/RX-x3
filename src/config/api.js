@@ -30,6 +30,9 @@ class Server {
     async Camera_p(options) {
         return axios.post('/Camera/', options)
     }
+    async Camera_put(options, name) {
+        return axios.post(`/Camera/${name}`, options)
+    }
     // 通道信息获取接口
     async Location_g() {
         return axios.get('/Location/')

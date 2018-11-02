@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Button } from 'antd'
 import api from '../../config/api.js'
 import './index.scss'
 import CameraModal from './CameraModal'
@@ -26,7 +27,8 @@ class CameraManage extends Component {
     showModal = () => {
         this.setState({
             visible: true,
-            modelTitle: '添加摄像头'
+            modelTitle: '添加摄像头',
+            cameraType: "add"
         });
     }
     linkTest = () => {
@@ -55,7 +57,8 @@ class CameraManage extends Component {
         this.setState({
             visible: true,
             modelTitle: '修改摄像头',
-            clickItem: item
+            clickItem: item,
+            cameraType: "edit"
         });
     }
     sonCarmeraModal = (control) => {
@@ -74,7 +77,7 @@ class CameraManage extends Component {
 
 
     listDom = async () => {
-        let {data:result} = await api.Camera_g()
+        let { data: result } = await api.Camera_g()
         console.log(result);
         let dom = result.map((item, index) => {
             return (
@@ -89,15 +92,15 @@ class CameraManage extends Component {
                         <p>RTSP地址:</p>
                         <p title={item.protocol}><span>{item.protocol}</span></p>
                     </div>
-                    <div className="link-state">
+                    {/* <div className="link-state">
                         <p>视频连接:<span>正常</span></p>
                         <p>解码:<span>正常</span></p>
                     </div>
                     <div className="link-test">
                         <span onClick={this.linkTest} className='blue'>测试</span>
-                    </div>
+                    </div> */}
                     <div className="operate">
-                        <span onClick={this.restCarmera.bind(this,item)} className='blue'>配置</span>
+                        <span onClick={this.restCarmera.bind(this, item)} className='blue'>配置</span>
                         {/* <span onClick={this.deleteCarmera} className='red'>删除</span> */}
                     </div>
                 </div>
@@ -112,7 +115,7 @@ class CameraManage extends Component {
         return (
             <div className='camera-manage'>
                 <div className="top">
-                    {/* <Button type="primary" onClick={this.showModal} size={"default"}>添加摄像头</Button> */}
+                    <Button type="primary" onClick={this.showModal} size={"default"}>添加摄像头</Button>
                     <span className='warn'>支持最大的摄像头路数:2</span>
                 </div>
                 <div className="table">
@@ -124,14 +127,15 @@ class CameraManage extends Component {
                         <div className="ip">摄像头ip</div>
                         {/* <div className="port">端口号</div> */}
                         <div className="protocol">勾流方式</div>
-                        <div className="link-state">连接状态</div>
-                        <div className="link-test">连接测试</div>
+                        {/* <div className="link-state">连接状态</div>
+                        <div className="link-test">连接测试</div> */}
                         <div className="operate">操作</div>
                     </div>
                     {/* 添加修改摄像头模态框 */}
                     <CameraModal
+                        type={this.state.cameraType}
                         data={this.state.clickItem}
-                        initForm = {this.initForm}
+                        initForm={this.initForm}
                         visible={this.state.visible}
                         title={this.state.modelTitle}
                         sonCarmeraModal={this.sonCarmeraModal}

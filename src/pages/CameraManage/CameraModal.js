@@ -16,9 +16,11 @@ class CameraModal extends Component {
         this.props.initForm(this)
     }
     componentWillReceiveProps(nextProps) {
+        console.log('nextProps', nextProps);
         this.setState({
             visible: nextProps.visible,
-            data: nextProps.data
+            data: nextProps.data,
+            type: nextProps.type
         })
     }
     initForm = (item) => {
@@ -61,12 +63,22 @@ class CameraModal extends Component {
                     ip: values.ip,
                     protocol: values.RTSP
                 }
-                let data = await api.Camera_p(option)
-                if (data.status !== 200) {
-                    message.error('更新失败')
-                } else {
-                    message.success('更新成功')
-                    this.handleCancel()
+                if (this.state.type === "edit") {
+                    let data = await api.Camera_put(option, values.name)
+                    if (data.status !== 200) {
+                        message.error('更新失败')
+                    } else {
+                        message.success('更新成功')
+                        this.handleCancel()
+                    }
+                } else if (this.state.type === "add") {
+                    let data = await api.Camera_p(option)
+                    if (data.status !== 200) {
+                        message.error('更新失败')
+                    } else {
+                        message.success('更新成功')
+                        this.handleCancel()
+                    }
                 }
             }
         })
@@ -86,6 +98,7 @@ class CameraModal extends Component {
         };
         return (
             <Modal
+                maskClosable={false}
                 className='carmera-modal'
                 title={this.props.title}
                 visible={this.state.visible}

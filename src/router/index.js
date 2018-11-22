@@ -20,6 +20,7 @@ import FaceList from './../pages/FaceList'
 import ProjectTest from './../pages/ProjectTest'
 import Esthesis from './../pages/Esthesis'
 import Arrange from './../pages/Arrange'
+import Qrcode from './../pages/qr-code'
 
 // import System from './../pages/System'
 import CaptureLog from './../pages/captureLog'
@@ -54,6 +55,7 @@ class IRouter extends React.Component {
                                     <Route path='/project/projectTest' component={ProjectTest} />
                                     <Route path='/project/esthesis' component={Esthesis} />
                                     <Route path='/project/arrange' component={Arrange} />
+                                    <Route path='/project/qr-code' component={Qrcode} />
 
                                     <Route path='/system/captureLog' component={CaptureLog} />
                                     <Route path='/system/passLog' component={PassLog} />

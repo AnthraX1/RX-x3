@@ -73,6 +73,10 @@ const data = [
             {
                 name: '布控系统',
                 key: '/project/arrange'
+            },
+            {
+                name: '二维码',
+                key: '/project/qr-code'
             }
         ]
     },

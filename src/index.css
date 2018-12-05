@@ -1,9 +1,10 @@
 body {
   margin: 0;
   padding: 0;
+  height: auto !important;
   font-family: sans-serif;
 }
 #root{
   width: 100%;
-  height: 100%;
+  /* height: 100%; */
 }

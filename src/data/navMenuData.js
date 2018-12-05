@@ -75,7 +75,7 @@ const data = [
                 key: '/project/arrange'
             },
             {
-                name: '二维码',
+                name: '系统参数详情',
                 key: '/project/qr-code'
             }
         ]

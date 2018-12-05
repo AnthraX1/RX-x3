@@ -1,18 +1,41 @@
 import React, { Component } from 'react';
-import { Form, Input, Button } from 'antd'
+import { Form, Input, Button, Cascader } from 'antd'
 import './index.scss'
 import QRCode from 'qrcode.react'
 
 const FormItem = Form.Item
 class index extends Component {
     state = {
-        url: '我是二维码.,,, 继续扫我我是二维码.,,, 继续扫我我是二维码.,,, 继续扫我'
+        url: '100.100.1000.100,100.100.1000.100',
+        options: [{
+            value: 'X3',
+            label: 'X3',
+            children: [{
+                value: 'X3',
+                label: 'X3',
+                children: [{
+                    value: 'X3',
+                    label: 'X3',
+                }],
+            }],
+        }, {
+            value: 'X5',
+            label: 'X5',
+            children: [{
+                value: 'X5',
+                label: 'X5',
+                children: [{
+                    value: 'X5',
+                    label: 'X5',
+                }],
+            }],
+        }]
     }
     qrClick = () => {
-        let canvasDOM = this.state.canvasDOM
-        let appDOM = document.querySelector('body')
         let hasMarkDOM = document.querySelector('.qr-mark')
         if (hasMarkDOM) return
+        let canvasDOM = this.state.canvasDOM
+        let appDOM = document.querySelector('body')
         canvasDOM.style.width = "600px"
         canvasDOM.style.height = "600px"
         canvasDOM.style.top = "-110px"
@@ -34,6 +57,9 @@ class index extends Component {
         appDOM.appendChild(markDOM)
         // console.log(markDOM);
 
+    }
+    onChange = (item) => {
+        console.log(item);
     }
     componentDidMount() {
         let canvasDOM = document.querySelector('.qr-code-canvas')
@@ -57,6 +83,7 @@ class index extends Component {
         return (
             <div className="qr-code">
                 <div className="head">
+                    <Cascader options={this.state.options} onChange={this.onChange} placeholder="Please select" />
                     <QRCode onClick={this.qrClick} className="qr-code-canvas" size={150} value={this.state.url} />
                 </div>
                 <div className="content">

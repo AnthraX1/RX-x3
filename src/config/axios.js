@@ -10,7 +10,7 @@ axios.defaults.withCredentials = true
 // axios.defaults.baseURL = 'http://120.55.46.197:8080/v1';
 // axios.defaults.baseURL = 'http://192.168.200.110:8080/v1';
 // axios.defaults.baseURL = 'http://127.0.0.1:8080/v1';
-axios.defaults.baseURL = `http://${ip.ip}:8080/v1`;
+axios.defaults.baseURL = `http://${ip.ip}:2002/v1`;
 // axios.defaults.baseURL = 'http://192.168.67.12:8080/v1';
 // axios.defaults.baseURL = 'http://192.168.67.31:9888/v1';
 

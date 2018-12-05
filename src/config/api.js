@@ -85,6 +85,10 @@ class Server {
         return axios.put(`/Surv/${node}`, options)
     }
 
+    // 二维码
+    async getIPC(options) {
+        return axios.post('/IPC/Query',options)
+    }
 
     // 通行日记和抓怕日记接口
     async faceLog(hit = 0, num = 10, page = 1, ch = "", beg = 0, end = 0) {

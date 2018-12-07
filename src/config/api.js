@@ -92,6 +92,9 @@ class Server {
     async getX3(options) {
         return axios.post('/X3/Query', options)
     }
+    async getQRData(options) {
+        return axios.post('/X3/QR', options)
+    }
 
     // 通行日记和抓怕日记接口
     async faceLog(hit = 0, num = 10, page = 1, ch = "", beg = 0, end = 0) {

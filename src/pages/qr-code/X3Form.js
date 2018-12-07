@@ -79,6 +79,7 @@ class X3Form extends Component {
         let { data } = await api.getX3(options)
         let { fw, loc, mac, model, nas, network, pm, pt_dev, pt_loc, sn, sw, vendor } = data[0]
         // console.log("data", data);
+        this.props.parent(sn)
         this.props.form.setFieldsValue({
             fw, loc, mac, model, nas, network, pm, pt_dev, pt_loc, sn, sw, vendor
         })

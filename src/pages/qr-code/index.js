@@ -15,7 +15,7 @@ class index extends Component {
         formType: 'x3',
         loading: false,
         visible: false,
-        url: 'H4sIAAAAAAAA/7zUsYrbQBAG4HeZeqX8M7sSd9smBAdSBBzIwRGMkHVE2JIOWZwDxlVIZVK6T5M6Vbq8jk0eI6yNYzs+eeXGpf7R/rt8xczosyY7o6IaZmOydKdJ0aQkS+/7b4M7HQBgUvSUlcOq3sakqEhSsgRYiIW2MBaRRUyKHvK6mCZ1tunqBa8/BAhdwaR6aA7y/i4fV2nS5JW7cf1r8efncv3j9/r7AhxsP1fflquvX0jRYzMYV+7WCGABAAE4QowY2M6H2dN+LmDWEsGAb928zJppVY/IEt9KyPFNyCEDL8S4w8X/ub0BxB1LJkcjAWiuKH9Myd7v3d68e7mD6+Wj4FX/BK6Xj/ZwfBbONTwH5/IL4TZvOEfHHjpupWNHN1ceA2k1kKsZiMdAPAbSaiCdDHSrgb6agfYYaI+BbjXQnQxMq4G5moHxGBiPgWk1MBuDj4rST0lZOoV7/0799y8rSgfHeungZJccEnsrpUOlXFapO1TqyypNh0rnOv8LAAD//wEAAP//U5qU/KcGAAA=',
+        url: '',
 
     }
     qrClick = () => {
@@ -89,12 +89,16 @@ class index extends Component {
     parent = (child) => {
         this.child = child
     }
+    getX3Info = (info) => {
+        console.log(info);
+        this.setState({sn: info})
+    }
     show = (type) => {
         this.setState({ formType: type })
     }
     FormTable = (type) => {
         if (type === 'x3') {
-            return <X3Form></X3Form>
+            return <X3Form parent={this.getX3Info}></X3Form>
         } else if (type === 'ipc') {
             return <IPC parent={this.parent} index={this.state.IPCIndex} data={this.state.data}></IPC>
         }
@@ -104,9 +108,21 @@ class index extends Component {
             return <Select className="select" defaultValue="" style={{ width: 300 }} onChange={this.onChange}>
                 {this.state.optionList}
             </Select>
-        }else {
-            return 
+        } else {
+            return
         }
+    }
+    getQrData = async () => {
+        this.setState({loading: true})
+        let options = {
+            "model": "X3",
+            "sn": this.state.sn
+        }
+        let {data} = await api.getQRData(options)
+        console.log(data.qr);
+        this.setState({url: data.qr,loading:false }, () => {
+            this.qrClick()
+        })
     }
     render() {
         const formItemLayout = {
@@ -122,7 +138,7 @@ class index extends Component {
                     <Button onClick={this.show.bind(this, 'x3')} type="primary">X3参数</Button>
                     <Button onClick={this.show.bind(this, 'ipc')} type="primary">IPC参数</Button>
 
-                    <Button onClick={this.qrClick} type="primary" loading={this.state.loading}>生成二维码</Button>
+                    <Button onClick={this.getQrData} type="primary" loading={this.state.loading}>生成二维码</Button>
                     {this.ipcSelect(this.state.formType)}
                 </div>
                 {/* 添加框 */}

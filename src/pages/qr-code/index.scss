@@ -2,6 +2,10 @@
     .head {
         height: 150px;
         position: relative;
+        padding: 30px 0 0 30px;
+        button {
+            margin: 0 20px;
+        }
         .qr-code-canvas {
             position: absolute;
             top: 0;
@@ -9,22 +13,26 @@
             transform: translateX(-50%);
             z-index: 999;
             transition: all .5s;
+            display: none;
         }
         .select {
-            margin: 30px 0 0 30px;
+            // margin: 30px 0 0 30px;
             width: 400px;
         }
     }
     .content {
         .table {
             display: flex;
-            justify-content: space-between;
-            >div {
-                flex: 1;
-                input {
-                    background-color: #F2F2F2;
-                }
+            justify-content: center;
+            form {
+                width: 100%;
             }
+            h2 {
+                text-align: center;
+            }
+            input {
+                background-color: #F2F2F2;
+            } 
         }
         .btn {
             margin: 0 0 30px 0;

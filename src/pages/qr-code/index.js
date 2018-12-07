@@ -12,31 +12,11 @@ const Option = Select.Option;
 
 class index extends Component {
     state = {
+        formType: 'x3',
+        loading: false,
         visible: false,
-        url: '100.100.1000.100,100.100.1000.100',
-        options: [{
-            value: 'X3',
-            label: 'X3',
-            children: [{
-                value: 'X3',
-                label: 'X3',
-                children: [{
-                    value: 'X3',
-                    label: 'X3',
-                }],
-            }],
-        }, {
-            value: 'X5',
-            label: 'X5',
-            children: [{
-                value: 'X5',
-                label: 'X5',
-                children: [{
-                    value: 'X5',
-                    label: 'X5',
-                }],
-            }],
-        }]
+        url: 'H4sIAAAAAAAA/7zUsYrbQBAG4HeZeqX8M7sSd9smBAdSBBzIwRGMkHVE2JIOWZwDxlVIZVK6T5M6Vbq8jk0eI6yNYzs+eeXGpf7R/rt8xczosyY7o6IaZmOydKdJ0aQkS+/7b4M7HQBgUvSUlcOq3sakqEhSsgRYiIW2MBaRRUyKHvK6mCZ1tunqBa8/BAhdwaR6aA7y/i4fV2nS5JW7cf1r8efncv3j9/r7AhxsP1fflquvX0jRYzMYV+7WCGABAAE4QowY2M6H2dN+LmDWEsGAb928zJppVY/IEt9KyPFNyCEDL8S4w8X/ub0BxB1LJkcjAWiuKH9Myd7v3d68e7mD6+Wj4FX/BK6Xj/ZwfBbONTwH5/IL4TZvOEfHHjpupWNHN1ceA2k1kKsZiMdAPAbSaiCdDHSrgb6agfYYaI+BbjXQnQxMq4G5moHxGBiPgWk1MBuDj4rST0lZOoV7/0799y8rSgfHeungZJccEnsrpUOlXFapO1TqyypNh0rnOv8LAAD//wEAAP//U5qU/KcGAAA=',
+
     }
     qrClick = () => {
         let hasMarkDOM = document.querySelector('.qr-mark')
@@ -46,6 +26,7 @@ class index extends Component {
         canvasDOM.style.width = "600px"
         canvasDOM.style.height = "600px"
         canvasDOM.style.top = "-110px"
+        canvasDOM.style.display = "inline-block"
         let markDOM = document.createElement('div')
         markDOM.setAttribute('class', 'qr-mark')
         markDOM.style.position = 'absolute'
@@ -59,6 +40,7 @@ class index extends Component {
             canvasDOM.style.width = "150px"
             canvasDOM.style.height = "150px"
             canvasDOM.style.top = "0px"
+            canvasDOM.style.display = "none"
             appDOM.removeChild(markDOM)
         })
         appDOM.appendChild(markDOM)
@@ -66,7 +48,7 @@ class index extends Component {
 
     }
     onChange = (item) => {
-        this.child.initForm(this.state.data[item])
+        this.child.initForm(this.state.data[item]) // 触发子组件的方法
     }
     componentDidMount() {
         let canvasDOM = document.querySelector('.qr-code-canvas')
@@ -79,18 +61,17 @@ class index extends Component {
             "sn": ""
         }
         let { data } = await api.getIPC(options)
-        console.log(data);
 
         let optionList = data.map((v, i) => {
             return (
-                <Option value={i} key={v.sn}>{v.location}</Option>
+                <Option value={i} key={v.sn}>{v.loc}</Option>
             )
         })
         this.setState({ optionList, data })
-        
+
     }
-    
-    
+
+
     addIPC = () => {
         this.setState({
             visible: true
@@ -105,8 +86,27 @@ class index extends Component {
     addSubmit = () => {
 
     }
-    parent= (child) => {
+    parent = (child) => {
         this.child = child
+    }
+    show = (type) => {
+        this.setState({ formType: type })
+    }
+    FormTable = (type) => {
+        if (type === 'x3') {
+            return <X3Form></X3Form>
+        } else if (type === 'ipc') {
+            return <IPC parent={this.parent} index={this.state.IPCIndex} data={this.state.data}></IPC>
+        }
+    }
+    ipcSelect = (type) => {
+        if (type === 'ipc') {
+            return <Select className="select" defaultValue="" style={{ width: 300 }} onChange={this.onChange}>
+                {this.state.optionList}
+            </Select>
+        }else {
+            return 
+        }
     }
     render() {
         const formItemLayout = {
@@ -117,11 +117,13 @@ class index extends Component {
         return (
             <div className="qr-code">
                 <div className="head">
-                    <Select className="select" defaultValue="" style={{ width: 300 }} onChange={this.onChange}>
-                        {this.state.optionList}
-                    </Select>
-                    <Button type="primary" onClick={this.addIPC}>新增</Button>
+                    {/* <Button type="primary" onClick={this.addIPC}>新增</Button> */}
                     <QRCode onClick={this.qrClick} className="qr-code-canvas" size={150} value={this.state.url} />
+                    <Button onClick={this.show.bind(this, 'x3')} type="primary">X3参数</Button>
+                    <Button onClick={this.show.bind(this, 'ipc')} type="primary">IPC参数</Button>
+
+                    <Button onClick={this.qrClick} type="primary" loading={this.state.loading}>生成二维码</Button>
+                    {this.ipcSelect(this.state.formType)}
                 </div>
                 {/* 添加框 */}
                 <Modal
@@ -257,12 +259,7 @@ class index extends Component {
                 </Modal>
                 <div className="content">
                     <div className="table">
-                        <div className="left">
-                            <X3Form></X3Form>
-                        </div>
-                        <div className="mid">
-                            <IPC parent={this.parent} index={this.state.IPCIndex} data={this.state.data}></IPC>
-                        </div>
+                        {this.FormTable(this.state.formType)}
                     </div>
 
                 </div>

@@ -64,7 +64,7 @@ class AddIPC extends Component {
     formItem = () => {
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
-            labelCol: { span: 4 },
+            labelCol: { span: 6 },
             wrapperCol: { span: 18 },
         };
         let formDOM = this.state.item.map((v, i) => {

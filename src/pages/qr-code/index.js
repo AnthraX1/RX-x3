@@ -126,7 +126,7 @@ class index extends Component {
     }
     render() {
         const formItemLayout = {
-            labelCol: { span: 8 },
+            labelCol: { span: 10 },
             wrapperCol: { span: 14 },
         };
         const { getFieldDecorator } = this.props.form;

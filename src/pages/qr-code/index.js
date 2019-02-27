@@ -134,7 +134,7 @@ class index extends Component {
             <div className="qr-code">
                 <div className="head">
                     {/* <Button type="primary" onClick={this.addIPC}>新增</Button> */}
-                    <QRCode onClick={this.qrClick} className="qr-code-canvas" size={150} value={this.state.url} />
+                    <QRCode onClick={this.qrClick} className="qr-code-canvas" size={1000} value={this.state.url} />
                     <Button onClick={this.show.bind(this, 'x3')} type="primary">X3参数</Button>
                     <Button onClick={this.show.bind(this, 'ipc')} type="primary">IPC参数</Button>
 

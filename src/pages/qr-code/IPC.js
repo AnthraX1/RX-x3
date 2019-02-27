@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Input, Button, Col } from 'antd'
+import { Form, Input,  Col } from 'antd'
 const FormItem = Form.Item
 class AddIPC extends Component {
     state = {
@@ -102,7 +102,7 @@ class AddIPC extends Component {
                     <h2>IPC配置 {this.state.ipc_location}</h2>
                     {this.formItem()}
                     <div className="btn">
-                        <Button type="primary" htmlType="submit">配   置</Button>
+                        {/* <Button type="primary" htmlType="submit">配   置</Button> */}
                     </div>
                 </Form>
             </div>

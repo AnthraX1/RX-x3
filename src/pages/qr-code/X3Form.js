@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Input, Button, Col } from 'antd'
+import { Form, Input,  Col } from 'antd'
 import api from '../../config/api'
 const FormItem = Form.Item
 
@@ -124,7 +124,7 @@ class X3Form extends Component {
                 <Form onSubmit={this.X3Submit}>
                     {this.formItem()}
                     <div className="btn">
-                        <Button type="primary" htmlType="submit">配   置</Button>
+                        {/* <Button type="primary" htmlType="submit">配   置</Button> */}
                     </div>
                 </Form>
             </div>
